@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PokemonApp</string>
+    <string name="generic_error">Check you connection and try again</string>
+    <string name="pokemon_number"># %s</string>
 </resources>
