@@ -1,24 +1,28 @@
 package com.example.pokemonapp.view.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pokemonapp.R
-import com.example.pokemonapp.api.Urls
 import com.example.pokemonapp.api.response.PokemonListResponseItem
 import com.example.pokemonapp.extensions.imageURL
+import com.example.pokemonapp.extensions.pokemonId
 import com.example.pokemonapp.extensions.toPokemonNumber
+import com.example.pokemonapp.view.DetailedPokemonFragment
+import com.example.pokemonapp.view.model.PokeModel
 import kotlinx.android.synthetic.main.pokemon_item_list.view.*
-import java.text.Normalizer
 import java.util.*
-import java.util.logging.Logger
+
 
 class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>() {
 
     private val items = mutableListOf<PokemonListResponseItem>()
+
+    private var pokeSelectedListener: PokemonSelectedListener? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -43,7 +47,7 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
             val item = items[position]
 
             pokemon_name.text = item.name.capitalize(Locale.getDefault())
-            val pokemonId = item.url.substringAfter("pokemon/").replace("/", "")
+            val pokemonId = item.url.pokemonId()
             Glide.with(context)
                 .asBitmap()
                 .load(pokemonId.imageURL())
@@ -53,16 +57,14 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
 
 
             pokemon_card.setOnClickListener {
-                //TODO
+                pokeSelectedListener?.onPokemonSelected(pokemonId)
+                val activity = context as AppCompatActivity
+                val myFragment: Fragment = DetailedPokemonFragment()
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, myFragment)
+                    .addToBackStack("detailed_fragment").commit()
             }
         }
-    }
-
-    private fun String.normalizeString(): String {
-        return Normalizer.normalize(this, Normalizer.Form.NFD).replace(Regex("[^\\p{ASCII}]"), "")
-            .toLowerCase(
-                Locale.getDefault()
-            )
     }
 
     fun updateItems(newItems: MutableList<PokemonListResponseItem>) {
@@ -71,5 +73,17 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
             items.addAll(newItems)
         }
         notifyDataSetChanged()
+    }
+
+    fun registerPokemonSelectedListener(listener: PokemonSelectedListener) {
+        pokeSelectedListener = listener
+    }
+
+    fun unregisterPokemonSelectedListener() {
+        pokeSelectedListener = null
+    }
+
+    interface PokemonSelectedListener {
+        fun onPokemonSelected(id: String)
     }
 }

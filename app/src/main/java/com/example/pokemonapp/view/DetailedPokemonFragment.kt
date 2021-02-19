@@ -9,37 +9,34 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.pokemonapp.R
-import com.example.pokemonapp.databinding.PokemonListFragmentBinding
+import com.example.pokemonapp.databinding.DetailedPokemonFragmentBinding
+import com.example.pokemonapp.extensions.*
 import com.example.pokemonapp.loader.PokemonLoader
-import com.example.pokemonapp.view.adapter.PokemonListAdapter
 import com.example.pokemonapp.view.model.PokeModel
-import com.example.pokemonapp.view.model.PokemonListViewModel
+import com.example.pokemonapp.view.model.PokemonViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListener {
+class DetailedPokemonFragment : Fragment() {
 
-    private val pokemonListViewModel by sharedViewModel<PokemonListViewModel>()
+    private val pokemonViewModel by sharedViewModel<PokemonViewModel>()
     private val pokeModel: PokeModel by inject()
 
-    private lateinit var listAdapter: PokemonListAdapter
-
-    private lateinit var listBinding: PokemonListFragmentBinding
+    private lateinit var detailedPokeBinding: DetailedPokemonFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        listBinding =
+        detailedPokeBinding =
             DataBindingUtil.inflate(
-                inflater, R.layout.pokemon_list_fragment, container,
+                inflater, R.layout.detailed_pokemon_fragment, container,
                 false
             )
-        return listBinding.root
+        return detailedPokeBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,22 +49,37 @@ class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListen
             viewLifecycleOwner,
             Observer { if (it) initComponents() })
 
-        pokemonListViewModel.getPokemonList(FIRST_GEN_POKE)
+        pokeModel.pokeIdObserver.value?.let {
+            pokemonViewModel.getPokemon(it)
+        }
     }
 
     private fun initComponents() {
-        listBinding.recyclerView.layoutManager = GridLayoutManager(
-            requireContext(),
-            COLUMNS_NUMBER,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-        listBinding.recyclerView.adapter = PokemonListAdapter()
-        val pokeList = pokeModel.pokeListObserver.value
-        listAdapter = listBinding.recyclerView.adapter as PokemonListAdapter
-        pokeList?.let {
-            listAdapter.registerPokemonSelectedListener(this)
-            listAdapter.updateItems(pokeList.result)
+        pokeModel.pokeDetailsObserver.value?.let {
+            initializeDetails()
+        }
+    }
+
+    private fun initializeDetails() {
+        val data = pokeModel.pokeDetailsObserver.value
+        data?.let {
+            Glide.with(requireContext())
+                .asBitmap()
+                .load(data.id.toString().imageURL())
+                .into(detailedPokeBinding.pokemonBigIcon)
+            detailedPokeBinding.pokemonHeight.text =
+                it.height.toString().toPokemonHeight(requireContext())
+            detailedPokeBinding.pokemonWeight.text =
+                it.weight.toString().toPokemonWeight(requireContext())
+            val types = it.types
+            detailedPokeBinding.pokemonTypes1.text =
+                types[0].type.name.toPokemonType()
+            if (types.size > 1) {
+                detailedPokeBinding.pokemonTypesString.text =
+                    context?.getString(R.string.pokemon_types)
+                detailedPokeBinding.pokemonTypes2.visibility = View.VISIBLE
+                detailedPokeBinding.pokemonTypes2.text = types[1].type.name.toPokemonType()
+            }
         }
     }
 
@@ -89,21 +101,5 @@ class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListen
                 ).show()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        listAdapter.unregisterPokemonSelectedListener()
-    }
-
-    override fun onPokemonSelected(id: String) {
-        pokeModel.pokeIdObserver.value = id.toInt()
-    }
-
-    companion object {
-
-        private val FIRST_GEN_POKE = 151
-
-        private val COLUMNS_NUMBER = 2
     }
 }

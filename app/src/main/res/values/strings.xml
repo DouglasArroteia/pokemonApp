@@ -2,4 +2,10 @@
     <string name="app_name">PokemonApp</string>
     <string name="generic_error">Check you connection and try again</string>
     <string name="pokemon_number"># %s</string>
+    <string name="pokemon_height">Height</string>
+    <string name="pokemon_height_dm">%s dm</string>
+    <string name="pokemon_weight">Weight</string>
+    <string name="pokemon_weight_hg">%s hg</string>
+    <string name="pokemon_type">Type</string>
+    <string name="pokemon_types">Types</string>
 </resources>
