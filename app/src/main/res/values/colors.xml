@@ -8,4 +8,5 @@
     <color name="toolbar_background_color">#272727</color>
     <color name="pokemon_info_title">#306db4</color>
     <color name="pokemon_name">#306db4</color>
+    <color name="favorites_color">#d50000</color>
 </resources>
