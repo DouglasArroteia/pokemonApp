@@ -7,24 +7,25 @@ import com.example.pokemonapp.loader.PokemonLoader
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(
-    private val repo: PokemonRepository,
-    private val pokemonModel: PokeModel
+    private val repo: PokemonRepository
 ) : AbstractViewModel() {
 
-    fun setFavorite(id: Int) {
-        pokemonModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
+    private val pokeModel: PokeModel = PokeModel()
+
+    fun setFavorite(name: String) {
+        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
         viewModelScope.launch {
-            val model = FavoriteModel(id)
-            val response = repo.markAsFav(id, model)
+            val model = FavoriteModel(name)
+            val response = repo.setFavoritePokemon(name, model)
             handleResponse(response, ::handleError)
         }
-        pokemonModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
     }
 
     private fun handleError(error: Throwable?) {
-        pokemonModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
         error?.message?.let {
-            pokemonModel.pokeLoaderObserver.value = PokemonLoader.GenericError(it)
+            pokeModel.pokeLoaderObserver.value = PokemonLoader.GenericError(it)
         }
     }
 }

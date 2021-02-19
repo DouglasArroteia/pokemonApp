@@ -1,7 +1,7 @@
 package com.example.pokemonapp.view
 
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,16 +15,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokemonapp.R
 import com.example.pokemonapp.databinding.PokemonListFragmentBinding
 import com.example.pokemonapp.loader.PokemonLoader
+import com.example.pokemonapp.persistence.SharedPreferencesHelper
 import com.example.pokemonapp.view.adapter.PokemonListAdapter
-import com.example.pokemonapp.view.model.PokeModel
 import com.example.pokemonapp.view.model.PokemonListViewModel
+import com.example.pokemonapp.view.model.PokemonViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListener {
 
-    private val pokemonListViewModel by sharedViewModel<PokemonListViewModel>()
-    private val pokeModel: PokeModel by inject()
+    private val pokemonListViewModel by viewModel<PokemonListViewModel>()
+    private val pokemonViewModel by sharedViewModel<PokemonViewModel>()
 
     private lateinit var listAdapter: PokemonListAdapter
 
@@ -46,14 +48,16 @@ class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pokeModel.pokeLoaderObserver.observe(
+        pokemonListViewModel.pokeModel.pokeLoaderObserver.observe(
             viewLifecycleOwner,
-            Observer { handleState(it) })
-        pokeModel.pokeLoadedObserver.observe(
+            Observer {
+                handleState(it)
+            })
+        pokemonListViewModel.pokeModel.pokeLoadedObserver.observe(
             viewLifecycleOwner,
             Observer { if (it) initComponents() })
 
-        pokemonListViewModel.getPokemonList(FIRST_GEN_POKE)
+        pokemonListViewModel.getPokemonList(REAL_POKEMONS)
     }
 
     private fun initComponents() {
@@ -64,7 +68,7 @@ class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListen
             false
         )
         listBinding.recyclerView.adapter = PokemonListAdapter()
-        val pokeList = pokeModel.pokeListObserver.value
+        val pokeList = pokemonListViewModel.pokeModel.pokeListObserver.value
         listAdapter = listBinding.recyclerView.adapter as PokemonListAdapter
         pokeList?.let {
             listAdapter.registerPokemonSelectedListener(this)
@@ -98,17 +102,17 @@ class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListen
     }
 
     override fun onPokemonSelected(id: String) {
-        pokeModel.pokeIdObserver.value = id.toInt()
+        pokemonViewModel.pokeModel.pokeIdObserver.value = id.toInt()
         val activity = context as AppCompatActivity
         val myFragment: Fragment = DetailedPokemonFragment()
         activity.supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, myFragment)
+            .add(R.id.fragment_container, myFragment)
             .addToBackStack(null).commit()
     }
 
     companion object {
 
-        private val FIRST_GEN_POKE = 151
+        private val REAL_POKEMONS = 251
 
         private val COLUMNS_NUMBER = 2
     }

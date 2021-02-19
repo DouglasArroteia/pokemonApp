@@ -1,35 +1,36 @@
 package com.example.pokemonapp.view.model
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonapp.api.repositories.PokemonRepository
 import com.example.pokemonapp.loader.PokemonLoader
 import kotlinx.coroutines.launch
 
 class PokemonListViewModel(
-    private val repo: PokemonRepository,
-    private val pokemonModel: PokeModel
+    private val repo: PokemonRepository
 ) : AbstractViewModel() {
 
+    val pokeModel: PokeModel = PokeModel()
 
     fun getPokemonList(limit: Int) {
-        pokemonModel.pokeLoadedObserver.value = false
-        pokemonModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
+        pokeModel.pokeLoadedObserver.value = false
+        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
         viewModelScope.launch {
             val data = repo.getPokemonList(limit)
             val dataModel = handleResponse(data, ::handleError)
             dataModel?.let {
-                pokemonModel.pokeListObserver.value = it
-                pokemonModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
-                pokemonModel.pokeLoadedObserver.value = true
+                pokeModel.pokeListObserver.value = it
+                pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+                pokeModel.pokeLoadedObserver.value = true
             }
         }
-        pokemonModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
     }
 
     private fun handleError(error: Throwable?) {
-        pokemonModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
         error?.message?.let {
-            pokemonModel.pokeLoaderObserver.value = PokemonLoader.GenericError(it)
+            pokeModel.pokeLoaderObserver.value = PokemonLoader.GenericError(it)
         }
     }
 }

@@ -7,8 +7,8 @@ import retrofit2.http.*
 interface Favorites {
 
     @POST(Urls.BASE_URL_POST)
-    suspend fun markAsFav(
-        @Query("id") id: Int,
+    suspend fun setFavoritePokemon(
+        @Query("name") name: String,
         @Body body: FavoriteModel
     ): Response<Unit>
 }

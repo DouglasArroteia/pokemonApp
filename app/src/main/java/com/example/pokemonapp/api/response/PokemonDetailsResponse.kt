@@ -11,5 +11,4 @@ data class PokemonDetailsResponse(
     @SerializedName("types") val types: MutableList<TypesModel>,
     @SerializedName("weight") val weight: Int,
     @SerializedName("stats") val stats: MutableList<StatsModel>
-
 )

@@ -8,4 +8,17 @@
     <string name="pokemon_weight_hg">%s hg</string>
     <string name="pokemon_type">Type</string>
     <string name="pokemon_types">Types</string>
+    <string name="pokemon_stats">%s stats</string>
+    <string name="pokemon_details_attack">Attack</string>
+    <string name="pokemon_details_s_attack">Spe Attack</string>
+    <string name="pokemon_details_hp">Health</string>
+    <string name="pokemon_details_def">Defense</string>
+    <string name="pokemon_details_s_def">Spe Defense</string>
+    <string name="pokemon_details_speed">Speed</string>
+    <string name="status_attack">#ff0000</string>
+    <string name="status_s_attack">#00ff00</string>
+    <string name="status_hp">#0000ff</string>
+    <string name="status_def">#ffff00</string>
+    <string name="status_s_def">#ff00ff</string>
+    <string name="status_speed">#FF5722</string>
 </resources>

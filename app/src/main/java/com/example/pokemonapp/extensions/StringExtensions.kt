@@ -14,6 +14,9 @@ fun String.toPokemonHeight(context: Context): String =
 fun String.toPokemonWeight(context: Context): String =
     context.getString(R.string.pokemon_weight_hg, this)
 
+fun String.toPokemonStats(context: Context): String =
+    context.getString(R.string.pokemon_stats, this).capitalize(Locale.US)
+
 fun String.toPokemonType(): String =
     this.capitalize(Locale.getDefault())
 

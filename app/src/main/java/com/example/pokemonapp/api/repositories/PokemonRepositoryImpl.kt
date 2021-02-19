@@ -24,9 +24,9 @@ open class PokemonRepositoryImpl : BaseRepository(), PokemonRepository {
         }
     }
 
-    override suspend fun markAsFav(id: Int, body: FavoriteModel): Result<Unit> {
+    override suspend fun setFavoritePokemon(name: String, body: FavoriteModel): Result<Unit> {
         return handleResponse(errorBodyType = Error::class.java) {
-            RetrofitInstance.FAV_API.markAsFav(id, body)
+            RetrofitInstance.FAV_API.setFavoritePokemon(name, body)
         }
     }
 }

@@ -3,8 +3,7 @@ package com.example.pokemonapp.view.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pokemonapp.R
@@ -12,8 +11,7 @@ import com.example.pokemonapp.api.response.PokemonListResponseItem
 import com.example.pokemonapp.extensions.imageURL
 import com.example.pokemonapp.extensions.pokemonId
 import com.example.pokemonapp.extensions.toPokemonNumber
-import com.example.pokemonapp.view.DetailedPokemonFragment
-import com.example.pokemonapp.view.model.PokeModel
+import com.example.pokemonapp.persistence.SharedPreferencesHelper
 import kotlinx.android.synthetic.main.pokemon_item_list.view.*
 import java.util.*
 
@@ -23,6 +21,9 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
     private val items = mutableListOf<PokemonListResponseItem>()
 
     private var pokeSelectedListener: PokemonSelectedListener? = null
+
+    private lateinit var sharedPrefs: SharedPreferencesHelper
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -55,6 +56,13 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
 
             pokemon_number.text = pokemonId.toPokemonNumber(context)
 
+            sharedPrefs = SharedPreferencesHelper(context)
+            favorite_pokemon.background =
+                if (sharedPrefs.isFavorite(item.name)) {
+                    ContextCompat.getDrawable(context, R.drawable.favorite_selected)
+                } else {
+                    ContextCompat.getDrawable(context, R.drawable.favorite_unselected)
+                }
 
             pokemon_card.setOnClickListener {
                 pokeSelectedListener?.onPokemonSelected(pokemonId)
@@ -63,10 +71,8 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
     }
 
     fun updateItems(newItems: MutableList<PokemonListResponseItem>) {
-        items.apply {
-            items.clear()
-            items.addAll(newItems)
-        }
+        items.clear()
+        items.addAll(newItems)
         notifyDataSetChanged()
     }
 

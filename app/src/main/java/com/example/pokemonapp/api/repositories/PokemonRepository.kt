@@ -14,8 +14,8 @@ interface PokemonRepository : Repository {
         id: Int
     ): Result<PokemonDetailsResponse>
 
-    suspend fun markAsFav(
-        id: Int,
+    suspend fun setFavoritePokemon(
+        name: String,
         body: FavoriteModel
     ): Result<Unit>
 }
