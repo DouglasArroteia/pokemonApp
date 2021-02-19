@@ -1,5 +1,6 @@
 package com.example.pokemonapp.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +17,10 @@ import kotlinx.android.synthetic.main.pokemon_item_list.view.*
 import java.util.*
 
 
-class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>() {
+class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
+    RecyclerView.Adapter<PokemonListAdapter.ViewHolder>() {
 
     private val items = mutableListOf<PokemonListResponseItem>()
-
-    private var pokeSelectedListener: PokemonSelectedListener? = null
 
     private lateinit var sharedPrefs: SharedPreferencesHelper
 
@@ -65,7 +65,8 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
                 }
 
             pokemon_card.setOnClickListener {
-                pokeSelectedListener?.onPokemonSelected(pokemonId)
+                Log.d("DOUGLAS", "ID: $pokemonId")
+                navigateToDetailed.invoke(pokemonId.toInt())
             }
         }
     }
@@ -74,17 +75,5 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
-    }
-
-    fun registerPokemonSelectedListener(listener: PokemonSelectedListener) {
-        pokeSelectedListener = listener
-    }
-
-    fun unregisterPokemonSelectedListener() {
-        pokeSelectedListener = null
-    }
-
-    interface PokemonSelectedListener {
-        fun onPokemonSelected(id: String)
     }
 }

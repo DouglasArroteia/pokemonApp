@@ -1,29 +1,26 @@
 package com.example.pokemonapp.view
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokemonapp.R
 import com.example.pokemonapp.databinding.PokemonListFragmentBinding
 import com.example.pokemonapp.loader.PokemonLoader
-import com.example.pokemonapp.persistence.SharedPreferencesHelper
 import com.example.pokemonapp.view.adapter.PokemonListAdapter
 import com.example.pokemonapp.view.model.PokemonListViewModel
 import com.example.pokemonapp.view.model.PokemonViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListener {
+class PokemonListFragment : Fragment() {
 
     private val pokemonListViewModel by viewModel<PokemonListViewModel>()
     private val pokemonViewModel by sharedViewModel<PokemonViewModel>()
@@ -67,11 +64,11 @@ class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListen
             LinearLayoutManager.VERTICAL,
             false
         )
-        listBinding.recyclerView.adapter = PokemonListAdapter()
+
+        listBinding.recyclerView.adapter = PokemonListAdapter(::navigateToDetailedFragment)
         val pokeList = pokemonListViewModel.pokeModel.pokeListObserver.value
         listAdapter = listBinding.recyclerView.adapter as PokemonListAdapter
         pokeList?.let {
-            listAdapter.registerPokemonSelectedListener(this)
             listAdapter.updateItems(pokeList.result)
         }
     }
@@ -96,18 +93,9 @@ class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListen
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        listAdapter.unregisterPokemonSelectedListener()
-    }
-
-    override fun onPokemonSelected(id: String) {
-        pokemonViewModel.pokeModel.pokeIdObserver.value = id.toInt()
-        val activity = context as AppCompatActivity
-        val myFragment: Fragment = DetailedPokemonFragment()
-        activity.supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, myFragment)
-            .addToBackStack(null).commit()
+    private fun navigateToDetailedFragment(id: Int) {
+        pokemonViewModel.pokeModel.pokeIdObserver.value = id
+        findNavController().navigate(R.id.pokemon_details)
     }
 
     companion object {

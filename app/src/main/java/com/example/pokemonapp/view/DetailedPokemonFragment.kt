@@ -11,6 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.example.pokemonapp.R
 import com.example.pokemonapp.api.response.PokemonDetailsResponse
@@ -48,6 +50,7 @@ class DetailedPokemonFragment : Fragment() {
                 inflater, R.layout.detailed_pokemon_fragment, container,
                 false
             )
+
         return detailedPokeBinding.root
     }
 
@@ -101,7 +104,7 @@ class DetailedPokemonFragment : Fragment() {
     private fun loadStatusChart(pokemonDetails: PokemonDetailsResponse) {
         context?.let {
             val chartModel: AAChartModel = ChartModel().getChartModel()
-                .title(pokemonDetails.name.toPokemonStats(it))
+                .subtitle(pokemonDetails.name.toPokemonStats(it))
                 .colorsTheme(pokemonViewModel.statsColor)
                 .series(
                     arrayOf(

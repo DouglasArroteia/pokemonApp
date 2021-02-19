@@ -9,7 +9,7 @@ class ChartModel {
     fun getChartModel(): AAChartModel {
         return AAChartModel()
             .chartType(AAChartType.Column)
-            .titleStyle(TITLE_STYLE_COLOR)
+            .subtitleStyle(SUBTITLE_STYLE_COLOR)
             .backgroundColor(android.R.color.transparent)
             .axesTextColor(AXES_STYLE_COLOR)
             .dataLabelsEnabled(true)
@@ -17,13 +17,14 @@ class ChartModel {
             .xAxisVisible(false)
             .yAxisVisible(false)
             .yAxisMax(255f)
+            .touchEventEnabled(false)
     }
 
     companion object {
 
-        private val WHITE_COLOR = "#FFFFFF"
+        private const val WHITE_COLOR = "#FFFFFF"
         private val DATA_LABEL_STYLE_COLOR = AAStyle().color(WHITE_COLOR)
-        private val TITLE_STYLE_COLOR = AAStyle().color(WHITE_COLOR)
-        private val AXES_STYLE_COLOR = WHITE_COLOR
+        private val SUBTITLE_STYLE_COLOR = AAStyle().color(WHITE_COLOR).fontSize(30f)
+        private const val AXES_STYLE_COLOR = WHITE_COLOR
     }
 }

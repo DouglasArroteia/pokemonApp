@@ -70,4 +70,17 @@ dependencies {
 
     implementation "androidx.preference:preference-ktx:1.1.1"
 
+    // Kotlin
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.3"
+
+    // Feature module Support
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.3"
+
+    // Testing Navigation
+    androidTestImplementation "androidx.navigation:navigation-testing:2.3.3"
+
+    // Jetpack Compose Integration
+    implementation "androidx.navigation:navigation-compose:1.0.0-alpha07"
+
 }
