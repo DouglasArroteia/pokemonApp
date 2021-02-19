@@ -2,10 +2,13 @@ package com.example.pokemonapp.api.repositories
 
 import com.example.pokemonapp.api.Error
 import com.example.pokemonapp.api.RetrofitInstance
-import com.example.pokemonapp.api.model.FavoriteModel
 import com.example.pokemonapp.api.response.PokemonDetailsResponse
 import com.example.pokemonapp.api.response.PokemonListResponse
+import com.example.pokemonapp.api.response.models.FavoriteModel
 
+/**
+ * Contains the implementation of the Retrofit functions.
+ */
 open class PokemonRepositoryImpl : BaseRepository(), PokemonRepository {
 
     override suspend fun getPokemonList(limit: Int): Result<PokemonListResponse> {

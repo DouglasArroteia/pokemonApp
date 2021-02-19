@@ -1,6 +1,5 @@
 package com.example.pokemonapp.view.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,9 @@ import kotlinx.android.synthetic.main.pokemon_item_list.view.*
 import java.util.*
 
 
+/**
+ * The RecyclerAdapter for the Pokemon list.
+ */
 class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
     RecyclerView.Adapter<PokemonListAdapter.ViewHolder>() {
 
@@ -65,13 +67,15 @@ class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
                 }
 
             pokemon_card.setOnClickListener {
-                Log.d("DOUGLAS", "ID: $pokemonId")
                 navigateToDetailed.invoke(pokemonId.toInt())
             }
         }
     }
 
-    fun updateItems(newItems: MutableList<PokemonListResponseItem>) {
+    /**
+     * Update the adapter
+     */
+    fun updateAdapter(newItems: MutableList<PokemonListResponseItem>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()

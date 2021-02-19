@@ -7,6 +7,9 @@ import com.example.pokemonapp.injection.viewModels
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
+/**
+ * Application class
+ */
 class PokemonApplication : Application() {
 
     override fun onCreate() {

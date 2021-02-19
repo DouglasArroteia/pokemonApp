@@ -4,8 +4,14 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 
+/**
+ * The Chart used to shown the pokemon stats.
+ */
 class ChartModel {
 
+    /**
+     * Gets the chart model with some info set.
+     */
     fun getChartModel(): AAChartModel {
         return AAChartModel()
             .chartType(AAChartType.Column)

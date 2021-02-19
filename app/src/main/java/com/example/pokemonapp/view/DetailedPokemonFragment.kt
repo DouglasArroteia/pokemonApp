@@ -2,7 +2,6 @@ package com.example.pokemonapp.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,10 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.example.pokemonapp.R
 import com.example.pokemonapp.api.response.PokemonDetailsResponse
 import com.example.pokemonapp.databinding.DetailedPokemonFragmentBinding
-import com.example.pokemonapp.databinding.MainActivityBinding
 import com.example.pokemonapp.extensions.*
 import com.example.pokemonapp.loader.PokemonLoader
 import com.example.pokemonapp.persistence.SharedPreferencesHelper
@@ -25,12 +21,13 @@ import com.example.pokemonapp.view.model.FavoriteViewModel
 import com.example.pokemonapp.view.model.PokemonViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
-import kotlinx.android.synthetic.main.main_activity.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
+/**
+ * Fragment that handle the details of a pokemon.
+ */
 class DetailedPokemonFragment : Fragment() {
 
     private val pokemonViewModel by sharedViewModel<PokemonViewModel>()
@@ -71,6 +68,9 @@ class DetailedPokemonFragment : Fragment() {
         }
     }
 
+    /**
+     * Initialize the components of the fragment
+     */
     private fun initComponents() {
         val pokemonData = pokemonViewModel.pokeModel.pokeDetailsObserver.value
         pokemonData?.let {
@@ -80,6 +80,9 @@ class DetailedPokemonFragment : Fragment() {
         }
     }
 
+    /**
+     * Initialize the details shown in the fragment
+     */
     private fun initializeDetails(pokemonDetailsResponse: PokemonDetailsResponse) {
         Glide.with(requireContext())
             .asBitmap()
@@ -101,6 +104,9 @@ class DetailedPokemonFragment : Fragment() {
         loadStatusChart(pokemonDetailsResponse)
     }
 
+    /**
+     * Loads the graph chart to show the pokemon stats
+     */
     private fun loadStatusChart(pokemonDetails: PokemonDetailsResponse) {
         context?.let {
             val chartModel: AAChartModel = ChartModel().getChartModel()
@@ -132,10 +138,12 @@ class DetailedPokemonFragment : Fragment() {
         }
     }
 
+    /**
+     * Load the info for the favorite button
+     */
     private fun initializeFavoriteButton(pokemonDetailsResponse: PokemonDetailsResponse) {
         context?.let { ctx ->
             val pokeName = pokemonDetailsResponse.name
-            Log.d("DOUGLAS", "isFavorite: ${sharedPrefs.isFavorite(pokeName)} ")
             detailedPokeBinding.favoriteButton.background =
                 if (sharedPrefs.isFavorite(pokeName)) {
                     ContextCompat.getDrawable(ctx, R.drawable.favorite_selected)
@@ -143,13 +151,14 @@ class DetailedPokemonFragment : Fragment() {
                     ContextCompat.getDrawable(ctx, R.drawable.favorite_unselected)
                 }
             detailedPokeBinding.favoriteButton.setOnClickListener {
-                Log.d("DOUGLAS", "onClick: ${sharedPrefs.isFavorite(pokeName)} ")
                 handleFavoriteButton(ctx, pokeName)
             }
         }
     }
 
-
+    /**
+     * Handles the faovite button click
+     */
     private fun handleFavoriteButton(ctx: Context, pokeName: String) {
         detailedPokeBinding.favoriteButton.background =
             if (sharedPrefs.isFavorite(pokeName)) {
@@ -162,6 +171,11 @@ class DetailedPokemonFragment : Fragment() {
             }
     }
 
+    /**
+     * Handles the dialog state.
+     *
+     * @param state the state of the loader
+     */
     private fun handleState(state: PokemonLoader?) {
         val loadingDialog = LoadingDialog().getDialog(context)
         when (state) {

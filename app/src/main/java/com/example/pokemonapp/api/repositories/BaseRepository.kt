@@ -7,8 +7,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
+/**
+ * Used as a base for creating the pokemon Data repository.
+ */
 abstract class BaseRepository {
 
+    /**
+     * Handles the response from the JSON.
+     */
     protected suspend fun <T, R> handleResponse(
         errorBodyType: Class<R>? = null,
         call: suspend () -> Response<T>

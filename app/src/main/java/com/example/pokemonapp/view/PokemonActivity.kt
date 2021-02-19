@@ -6,6 +6,9 @@ import androidx.navigation.findNavController
 import com.example.pokemonapp.R
 import kotlinx.android.synthetic.main.main_activity.*
 
+/**
+ * Pokemon app activity.
+ */
 class PokemonActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,17 +1,26 @@
 package com.example.pokemonapp.view.model
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonapp.api.repositories.PokemonRepository
 import com.example.pokemonapp.loader.PokemonLoader
 import kotlinx.coroutines.launch
 
+/**
+ * The view model for the pokemon list
+ *
+ * @param repo the pokemon repository
+ */
 class PokemonListViewModel(
     private val repo: PokemonRepository
 ) : AbstractViewModel() {
 
     val pokeModel: PokeModel = PokeModel()
 
+    /**
+     * Gets the list of pokemons.
+     *
+     * @param limit the limit of pokemons returned.
+     */
     fun getPokemonList(limit: Int) {
         pokeModel.pokeLoadedObserver.value = false
         pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
@@ -27,6 +36,9 @@ class PokemonListViewModel(
         pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
     }
 
+    /**
+     * Handles any error.
+     */
     private fun handleError(error: Throwable?) {
         pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
         error?.message?.let {

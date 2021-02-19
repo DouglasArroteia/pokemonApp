@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
 /**
  * Model used for favorites.
  *
- * @param type the pokemon type
+ * @param name the pokemon name for being favorited.
  */
-data class TypesModel(
-    @SerializedName("type") val type: TypeModel
+data class FavoriteModel(
+    @SerializedName("name") val name: String
 )

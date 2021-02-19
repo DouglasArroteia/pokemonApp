@@ -20,6 +20,9 @@ import com.example.pokemonapp.view.model.PokemonViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+/**
+ * Fragment that handle the pokemon list
+ */
 class PokemonListFragment : Fragment() {
 
     private val pokemonListViewModel by viewModel<PokemonListViewModel>()
@@ -57,6 +60,9 @@ class PokemonListFragment : Fragment() {
         pokemonListViewModel.getPokemonList(REAL_POKEMONS)
     }
 
+    /**
+     * Initialize fragment components
+     */
     private fun initComponents() {
         listBinding.recyclerView.layoutManager = GridLayoutManager(
             requireContext(),
@@ -69,10 +75,15 @@ class PokemonListFragment : Fragment() {
         val pokeList = pokemonListViewModel.pokeModel.pokeListObserver.value
         listAdapter = listBinding.recyclerView.adapter as PokemonListAdapter
         pokeList?.let {
-            listAdapter.updateItems(pokeList.result)
+            listAdapter.updateAdapter(pokeList.list)
         }
     }
 
+    /**
+     * Handles the loading dialog state
+     *
+     * @param state the state of the loader
+     */
     private fun handleState(state: PokemonLoader?) {
         val loadingDialog = LoadingDialog().getDialog(context)
         when (state) {
@@ -93,6 +104,11 @@ class PokemonListFragment : Fragment() {
         }
     }
 
+    /**
+     * Navigates to the DetailedFragment
+     *
+     * @param id the pokemon id to be detailed
+     */
     private fun navigateToDetailedFragment(id: Int) {
         pokemonViewModel.pokeModel.pokeIdObserver.value = id
         findNavController().navigate(R.id.pokemon_details)
