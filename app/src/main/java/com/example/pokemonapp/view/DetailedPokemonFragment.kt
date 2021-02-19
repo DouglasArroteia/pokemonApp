@@ -67,6 +67,8 @@ class DetailedPokemonFragment : Fragment() {
                 .asBitmap()
                 .load(data.id.toString().imageURL())
                 .into(detailedPokeBinding.pokemonBigIcon)
+            detailedPokeBinding.pokemonName.text =
+                it.name
             detailedPokeBinding.pokemonHeight.text =
                 it.height.toString().toPokemonHeight(requireContext())
             detailedPokeBinding.pokemonWeight.text =

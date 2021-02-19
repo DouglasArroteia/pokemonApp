@@ -7,7 +7,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+        android:background="@color/background_color"
         android:clipToPadding="false"
         tools:context=".view.PokemonActivity">
 
@@ -17,15 +17,26 @@
             android:layout_height="200dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:background="@color/pokemon_detailed_image_bg"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/pokemon_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pokemon_name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/pokemon_big_icon"
+            app:layout_constraintEnd_toStartOf="@+id/info_card"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <androidx.cardview.widget.CardView
+            android:id="@+id/info_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            app:cardBackgroundColor="@android:color/holo_blue_dark"
+            app:cardBackgroundColor="@color/pokemon_info_card_color"
             app:cardCornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/pokemon_big_icon"
             app:layout_constraintEnd_toEndOf="parent"

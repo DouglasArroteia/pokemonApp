@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -98,6 +99,11 @@ class PokemonListFragment : Fragment(), PokemonListAdapter.PokemonSelectedListen
 
     override fun onPokemonSelected(id: String) {
         pokeModel.pokeIdObserver.value = id.toInt()
+        val activity = context as AppCompatActivity
+        val myFragment: Fragment = DetailedPokemonFragment()
+        activity.supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, myFragment)
+            .addToBackStack(null).commit()
     }
 
     companion object {

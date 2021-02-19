@@ -58,11 +58,6 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
 
             pokemon_card.setOnClickListener {
                 pokeSelectedListener?.onPokemonSelected(pokemonId)
-                val activity = context as AppCompatActivity
-                val myFragment: Fragment = DetailedPokemonFragment()
-                activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, myFragment)
-                    .addToBackStack("detailed_fragment").commit()
             }
         }
     }
