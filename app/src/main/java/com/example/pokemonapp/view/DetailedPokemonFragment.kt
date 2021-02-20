@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.pokemonapp.R
 import com.example.pokemonapp.api.response.PokemonDetailsResponse
@@ -24,7 +23,6 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
-import kotlinx.android.synthetic.main.detailed_pokemon_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -60,12 +58,10 @@ class DetailedPokemonFragment : Fragment() {
 
         pokemonViewModel.pokeModel.pokeLoaderObserver.observe(
             viewLifecycleOwner,
-            Observer {
-                handleState(it)
-            })
+            { handleState(it) })
         pokemonViewModel.pokeModel.pokeLoadedObserver.observe(
             viewLifecycleOwner,
-            Observer { if (it) initComponents() })
+            { if (it) initComponents() })
 
         pokemonViewModel.pokeModel.pokeIdObserver.value?.let {
             pokemonViewModel.getPokemon(it)
@@ -97,7 +93,7 @@ class DetailedPokemonFragment : Fragment() {
                     .intoCallBack { palette ->
                         val rgb = palette?.dominantSwatch?.rgb
                         if (rgb != null) {
-                            pokemon_details_card.setCardBackgroundColor(rgb)
+                            detailedPokeBinding.pokemonDetailsCard.setCardBackgroundColor(rgb)
                         }
                     }.crossfade(true)
             )

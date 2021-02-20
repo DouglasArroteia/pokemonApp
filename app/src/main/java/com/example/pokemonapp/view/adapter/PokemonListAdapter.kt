@@ -1,20 +1,14 @@
 package com.example.pokemonapp.view.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.pokemonapp.R
 import com.example.pokemonapp.api.response.PokemonListResponseItem
+import com.example.pokemonapp.databinding.PokemonItemListBinding
 import com.example.pokemonapp.extensions.imageURL
 import com.example.pokemonapp.extensions.pokemonId
 import com.example.pokemonapp.extensions.toPokemonNumber
 import com.example.pokemonapp.persistence.SharedPreferencesHelper
-import com.github.florent37.glidepalette.BitmapPalette
-import com.github.florent37.glidepalette.GlidePalette
-import kotlinx.android.synthetic.main.pokemon_item_list.view.*
 import java.util.*
 
 
@@ -22,62 +16,64 @@ import java.util.*
  * The RecyclerAdapter for the Pokemon list.
  */
 class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
-    RecyclerView.Adapter<PokemonListAdapter.ViewHolder>() {
+    RecyclerView.Adapter<PokemonListAdapter.PokemonListViewHolder>() {
 
     private val items = mutableListOf<PokemonListResponseItem>()
-
-    private lateinit var sharedPrefs: SharedPreferencesHelper
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ViewHolder {
-        val layout = LayoutInflater.from(parent.context)
-            .inflate(R.layout.pokemon_item_list, parent, false)
+    ): PokemonListViewHolder {
+        val itemListBinding =
+            PokemonItemListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return ViewHolder(layout)
+        return PokemonListViewHolder(itemListBinding)
     }
 
     override fun getItemCount() = items.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind()
+    override fun onBindViewHolder(holder: PokemonListViewHolder, position: Int) {
+        val item = items[position]
+        holder.bind(item)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        fun bind() = with(itemView) {
-            val position = adapterPosition
-            val item = items[position]
-
-            pokemon_name.text = item.name.capitalize(Locale.getDefault())
+    inner class PokemonListViewHolder(private val itemListBinding: PokemonItemListBinding) :
+        RecyclerView.ViewHolder(itemListBinding.root) {
+        fun bind(item: PokemonListResponseItem) {
+            val context = itemListBinding.root.context
+            itemListBinding.pokemonName.text = item.name.capitalize(Locale.getDefault())
             val pokemonId = item.url.pokemonId()
-            Glide.with(context)
+            com.bumptech.glide.Glide.with(context)
                 .load(pokemonId.imageURL())
                 .listener(
-                    GlidePalette.with(pokemonId.imageURL())
-                        .use(BitmapPalette.Profile.MUTED_LIGHT)
+                    com.github.florent37.glidepalette.GlidePalette.with(pokemonId.imageURL())
+                        .use(com.github.florent37.glidepalette.BitmapPalette.Profile.MUTED_LIGHT)
                         .intoCallBack { palette ->
                             val rgb = palette?.dominantSwatch?.rgb
                             if (rgb != null) {
-                                pokemon_card.setCardBackgroundColor(rgb)
+                                itemListBinding.pokemonCard.setCardBackgroundColor(rgb)
                             }
                         }.crossfade(true)
                 )
-                .into(pokemon_icon)
+                .into(itemListBinding.pokemonIcon)
 
-            pokemon_number.text = pokemonId.toPokemonNumber(context)
+            itemListBinding.pokemonNumber.text = pokemonId.toPokemonNumber(context)
 
-            sharedPrefs = SharedPreferencesHelper(context)
-            favorite_pokemon.background =
+            val sharedPrefs = SharedPreferencesHelper(context)
+            itemListBinding.favoritePokemon.background =
                 if (sharedPrefs.isFavorite(item.name)) {
-                    ContextCompat.getDrawable(context, R.drawable.favorite_selected)
+                    androidx.core.content.ContextCompat.getDrawable(
+                        context,
+                        com.example.pokemonapp.R.drawable.favorite_selected
+                    )
                 } else {
-                    ContextCompat.getDrawable(context, R.drawable.favorite_unselected)
+                    androidx.core.content.ContextCompat.getDrawable(
+                        context,
+                        com.example.pokemonapp.R.drawable.favorite_unselected
+                    )
                 }
 
-            pokemon_card.setOnClickListener {
+            itemListBinding.pokemonCard.setOnClickListener {
                 navigateToDetailed.invoke(pokemonId.toInt())
             }
         }
