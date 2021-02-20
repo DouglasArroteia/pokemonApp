@@ -12,6 +12,8 @@ import com.example.pokemonapp.extensions.imageURL
 import com.example.pokemonapp.extensions.pokemonId
 import com.example.pokemonapp.extensions.toPokemonNumber
 import com.example.pokemonapp.persistence.SharedPreferencesHelper
+import com.github.florent37.glidepalette.BitmapPalette
+import com.github.florent37.glidepalette.GlidePalette
 import kotlinx.android.synthetic.main.pokemon_item_list.view.*
 import java.util.*
 
@@ -52,8 +54,17 @@ class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
             pokemon_name.text = item.name.capitalize(Locale.getDefault())
             val pokemonId = item.url.pokemonId()
             Glide.with(context)
-                .asBitmap()
                 .load(pokemonId.imageURL())
+                .listener(
+                    GlidePalette.with(pokemonId.imageURL())
+                        .use(BitmapPalette.Profile.MUTED_LIGHT)
+                        .intoCallBack { palette ->
+                            val rgb = palette?.dominantSwatch?.rgb
+                            if (rgb != null) {
+                                pokemon_card.setCardBackgroundColor(rgb)
+                            }
+                        }.crossfade(true)
+                )
                 .into(pokemon_icon)
 
             pokemon_number.text = pokemonId.toPokemonNumber(context)

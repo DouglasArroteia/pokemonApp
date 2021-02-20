@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="pokemon_detailed_image_bg">#16000000</color>
-    <color name="pokemon_list_icon_bg">#FFCB00</color>
     <color name="toolbar_text_color">#ffcb00</color>
-    <color name="pokemon_info_card_color">#ffcb00</color>
     <color name="background_color">#121212</color>
     <color name="toolbar_background_color">#272727</color>
-    <color name="pokemon_info_title">#306db4</color>
+    <color name="pokemon_info_title">#FFFFFF</color>
     <color name="pokemon_name">#306db4</color>
-    <color name="favorites_color">#d50000</color>
+    <color name="favorites_color">#FF0000</color>
+    <color name="info_description_text_color">#9FFFFFFF</color>
+    <color name="pokemon_list_text_color">#FFFFFF</color>
 </resources>

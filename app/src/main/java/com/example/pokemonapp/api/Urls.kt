@@ -19,6 +19,6 @@ internal class Urls {
         Url used to get the pokémon sprites, used as icon
          */
         const val ICON_BASE_URL =
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+            "https://pokeres.bastionbot.org/images/pokemon/"
     }
 }

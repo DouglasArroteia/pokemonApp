@@ -21,6 +21,10 @@ import com.example.pokemonapp.view.model.FavoriteViewModel
 import com.example.pokemonapp.view.model.PokemonViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
+import com.github.florent37.glidepalette.BitmapPalette
+import com.github.florent37.glidepalette.GlidePalette
+import kotlinx.android.synthetic.main.detailed_pokemon_fragment.*
+import kotlinx.android.synthetic.main.pokemon_item_list.view.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -84,9 +88,19 @@ class DetailedPokemonFragment : Fragment() {
      * Initialize the details shown in the fragment
      */
     private fun initializeDetails(pokemonDetailsResponse: PokemonDetailsResponse) {
+        val pokemonUrl = pokemonDetailsResponse.id.toString().imageURL()
         Glide.with(requireContext())
-            .asBitmap()
-            .load(pokemonDetailsResponse.id.toString().imageURL())
+            .load(pokemonUrl)
+            .listener(
+                GlidePalette.with(pokemonUrl)
+                    .use(BitmapPalette.Profile.MUTED_LIGHT)
+                    .intoCallBack { palette ->
+                        val rgb = palette?.dominantSwatch?.rgb
+                        if (rgb != null) {
+                            pokemon_details_card.setCardBackgroundColor(rgb)
+                        }
+                    }.crossfade(true)
+            )
             .into(detailedPokeBinding.pokemonBigIcon)
         detailedPokeBinding.pokemonHeight.text =
             pokemonDetailsResponse.height.toString().toPokemonHeight(requireContext())
@@ -144,13 +158,13 @@ class DetailedPokemonFragment : Fragment() {
     private fun initializeFavoriteButton(pokemonDetailsResponse: PokemonDetailsResponse) {
         context?.let { ctx ->
             val pokeName = pokemonDetailsResponse.name
-            detailedPokeBinding.favoriteButton.background =
+            detailedPokeBinding.favoritePokemon.background =
                 if (sharedPrefs.isFavorite(pokeName)) {
                     ContextCompat.getDrawable(ctx, R.drawable.favorite_selected)
                 } else {
                     ContextCompat.getDrawable(ctx, R.drawable.favorite_unselected)
                 }
-            detailedPokeBinding.favoriteButton.setOnClickListener {
+            detailedPokeBinding.favoritePokemon.setOnClickListener {
                 handleFavoriteButton(ctx, pokeName)
             }
         }
@@ -160,7 +174,7 @@ class DetailedPokemonFragment : Fragment() {
      * Handles the faovite button click
      */
     private fun handleFavoriteButton(ctx: Context, pokeName: String) {
-        detailedPokeBinding.favoriteButton.background =
+        detailedPokeBinding.favoritePokemon.background =
             if (sharedPrefs.isFavorite(pokeName)) {
                 sharedPrefs.unFavorite(pokeName)
                 ContextCompat.getDrawable(ctx, R.drawable.favorite_unselected)

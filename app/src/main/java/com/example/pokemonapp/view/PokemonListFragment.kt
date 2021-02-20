@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokemonapp.R
 import com.example.pokemonapp.databinding.PokemonListFragmentBinding
+import com.example.pokemonapp.extensions.isLandscape
 import com.example.pokemonapp.loader.PokemonLoader
 import com.example.pokemonapp.view.adapter.PokemonListAdapter
 import com.example.pokemonapp.view.model.PokemonListViewModel
@@ -64,18 +65,20 @@ class PokemonListFragment : Fragment() {
      * Initialize fragment components
      */
     private fun initComponents() {
-        listBinding.recyclerView.layoutManager = GridLayoutManager(
-            requireContext(),
-            COLUMNS_NUMBER,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
+        context?.let {
+            listBinding.recyclerView.layoutManager = GridLayoutManager(
+                requireContext(),
+                if (it.resources.isLandscape()) LANDSCAPE_COLUMN_NUMBER else PORTRAIT_COLUMN_NUMBER,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
 
-        listBinding.recyclerView.adapter = PokemonListAdapter(::navigateToDetailedFragment)
-        val pokeList = pokemonListViewModel.pokeModel.pokeListObserver.value
-        listAdapter = listBinding.recyclerView.adapter as PokemonListAdapter
-        pokeList?.let {
-            listAdapter.updateAdapter(pokeList.list)
+            listBinding.recyclerView.adapter = PokemonListAdapter(::navigateToDetailedFragment)
+            val pokeList = pokemonListViewModel.pokeModel.pokeListObserver.value
+            listAdapter = listBinding.recyclerView.adapter as PokemonListAdapter
+            pokeList?.let {
+                listAdapter.updateAdapter(pokeList.list)
+            }
         }
     }
 
@@ -115,9 +118,10 @@ class PokemonListFragment : Fragment() {
     }
 
     companion object {
+        private const val REAL_POKEMONS = 251
 
-        private val REAL_POKEMONS = 251
+        private const val PORTRAIT_COLUMN_NUMBER = 1
 
-        private val COLUMNS_NUMBER = 2
+        private const val LANDSCAPE_COLUMN_NUMBER = 2
     }
 }
