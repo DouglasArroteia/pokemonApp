@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
 /**
  * Response containing the pokémon list.
  *
- * @param list the pokémon list.
+ * @param pokeList the pokémon list.
  */
 data class PokemonListResponse(
-    @SerializedName("results") val list: MutableList<PokemonListResponseItem>
+    @SerializedName("results") val pokeList: MutableList<PokemonListResponseItem>
 )

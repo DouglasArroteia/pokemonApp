@@ -46,7 +46,7 @@ class PokemonRepositoryMocked : PokemonRepository {
                     StatsModel(baseStat = 23f),
                     StatsModel(baseStat = 65f),
                     StatsModel(baseStat = 156f),
-                    StatsModel(baseStat = 255f),
+                    StatsModel(baseStat = 250f),
                 )
             )
         )

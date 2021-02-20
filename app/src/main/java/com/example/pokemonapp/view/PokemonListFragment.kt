@@ -16,8 +16,8 @@ import com.example.pokemonapp.databinding.PokemonListFragmentBinding
 import com.example.pokemonapp.extensions.isLandscape
 import com.example.pokemonapp.loader.PokemonLoader
 import com.example.pokemonapp.view.adapter.PokemonListAdapter
-import com.example.pokemonapp.view.model.PokemonListViewModel
-import com.example.pokemonapp.view.model.PokemonViewModel
+import com.example.pokemonapp.view.viewmodel.PokemonListViewModel
+import com.example.pokemonapp.view.viewmodel.PokemonViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -77,7 +77,7 @@ class PokemonListFragment : Fragment() {
             val pokeList = pokemonListViewModel.pokeModel.pokeListObserver.value
             listAdapter = listBinding.recyclerView.adapter as PokemonListAdapter
             pokeList?.let {
-                listAdapter.updateAdapter(pokeList.list)
+                listAdapter.updateAdapter(pokeList.pokeList)
             }
         }
     }
@@ -97,10 +97,10 @@ class PokemonListFragment : Fragment() {
                     loadingDialog.dismiss()
                 }
             }
-            is PokemonLoader.GenericError -> {
+            is PokemonLoader.DefaultError -> {
                 Toast.makeText(
                     context,
-                    getString(R.string.generic_error),
+                    getString(R.string.default_error),
                     Toast.LENGTH_LONG
                 ).show()
             }

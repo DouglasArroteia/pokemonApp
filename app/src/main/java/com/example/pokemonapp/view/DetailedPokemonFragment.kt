@@ -17,14 +17,14 @@ import com.example.pokemonapp.databinding.DetailedPokemonFragmentBinding
 import com.example.pokemonapp.extensions.*
 import com.example.pokemonapp.loader.PokemonLoader
 import com.example.pokemonapp.persistence.SharedPreferencesHelper
-import com.example.pokemonapp.view.model.FavoriteViewModel
-import com.example.pokemonapp.view.model.PokemonViewModel
+import com.example.pokemonapp.utils.ApplicationUtils
+import com.example.pokemonapp.view.viewmodel.FavoriteViewModel
+import com.example.pokemonapp.view.viewmodel.PokemonViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
 import kotlinx.android.synthetic.main.detailed_pokemon_fragment.*
-import kotlinx.android.synthetic.main.pokemon_item_list.view.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -125,7 +125,7 @@ class DetailedPokemonFragment : Fragment() {
         context?.let {
             val chartModel: AAChartModel = ChartModel().getChartModel()
                 .subtitle(pokemonDetails.name.toPokemonStats(it))
-                .colorsTheme(pokemonViewModel.statsColor)
+                .colorsTheme(ApplicationUtils(it).statsColor)
                 .series(
                     arrayOf(
                         AASeriesElement()
@@ -200,10 +200,10 @@ class DetailedPokemonFragment : Fragment() {
                     loadingDialog.dismiss()
                 }
             }
-            is PokemonLoader.GenericError -> {
+            is PokemonLoader.DefaultError -> {
                 Toast.makeText(
                     context,
-                    getString(R.string.generic_error),
+                    getString(R.string.default_error),
                     Toast.LENGTH_LONG
                 ).show()
             }

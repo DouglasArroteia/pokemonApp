@@ -3,9 +3,9 @@ package com.example.pokemonapp.injection
 import com.example.pokemonapp.api.repositories.PokemonRepository
 import com.example.pokemonapp.api.repositories.PokemonRepositoryImpl
 import com.example.pokemonapp.persistence.SharedPreferencesHelper
-import com.example.pokemonapp.view.model.FavoriteViewModel
-import com.example.pokemonapp.view.model.PokemonListViewModel
-import com.example.pokemonapp.view.model.PokemonViewModel
+import com.example.pokemonapp.view.viewmodel.FavoriteViewModel
+import com.example.pokemonapp.view.viewmodel.PokemonListViewModel
+import com.example.pokemonapp.view.viewmodel.PokemonViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -15,7 +15,7 @@ import org.koin.dsl.module
  */
 val viewModels = module {
     viewModel { PokemonListViewModel(get()) }
-    viewModel { PokemonViewModel(get(), androidContext()) }
+    viewModel { PokemonViewModel(get()) }
     viewModel { FavoriteViewModel(get()) }
 }
 

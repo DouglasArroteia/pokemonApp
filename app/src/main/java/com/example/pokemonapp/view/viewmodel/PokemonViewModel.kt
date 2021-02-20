@@ -1,33 +1,21 @@
-package com.example.pokemonapp.view.model
+package com.example.pokemonapp.view.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonapp.R
 import com.example.pokemonapp.api.repositories.PokemonRepository
 import com.example.pokemonapp.loader.PokemonLoader
+import com.example.pokemonapp.view.observables.PokeModel
 import kotlinx.coroutines.launch
 
 /**
  * The view model for the pokemon info
  */
 class PokemonViewModel(
-    private val repo: PokemonRepository,
-    private val context: Context
+    private val repo: PokemonRepository
 ) : AbstractViewModel() {
 
     val pokeModel: PokeModel = PokeModel()
-
-    /**
-     * Colors used for shown each pokemon stats
-     */
-    val statsColor = arrayOf<Any>(
-        context.getString(R.string.status_attack),
-        context.getString(R.string.status_s_attack),
-        context.getString(R.string.status_hp),
-        context.getString(R.string.status_def),
-        context.getString(R.string.status_s_def),
-        context.getString(R.string.status_speed)
-    )
 
     /**
      * Returns the desired pokemon.
@@ -55,7 +43,7 @@ class PokemonViewModel(
     private fun handleError(error: Throwable?) {
         pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
         error?.message?.let {
-            pokeModel.pokeLoaderObserver.value = PokemonLoader.GenericError(it)
+            pokeModel.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
         }
     }
 }

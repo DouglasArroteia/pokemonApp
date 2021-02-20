@@ -1,4 +1,4 @@
-package com.example.pokemonapp.view.model
+package com.example.pokemonapp.view.observables
 
 import androidx.lifecycle.MutableLiveData
 import com.example.pokemonapp.api.response.PokemonDetailsResponse

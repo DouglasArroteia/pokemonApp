@@ -1,9 +1,10 @@
-package com.example.pokemonapp.view.model
+package com.example.pokemonapp.view.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonapp.api.repositories.PokemonRepository
 import com.example.pokemonapp.api.response.models.FavoriteModel
 import com.example.pokemonapp.loader.PokemonLoader
+import com.example.pokemonapp.view.observables.PokeModel
 import kotlinx.coroutines.launch
 
 /**
@@ -40,7 +41,7 @@ class FavoriteViewModel(
     private fun handleError(error: Throwable?) {
         pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
         error?.message?.let {
-            pokeModel.pokeLoaderObserver.value = PokemonLoader.GenericError(it)
+            pokeModel.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
         }
     }
 }
