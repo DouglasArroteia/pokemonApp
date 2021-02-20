@@ -1,5 +1,6 @@
 package com.example.pokemonapp.view
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -36,6 +37,10 @@ class DetailedPokemonFragment : Fragment() {
     private val favoriteViewModel by viewModel<FavoriteViewModel>()
 
     private lateinit var detailedPokeBinding: DetailedPokemonFragmentBinding
+
+    private val loadingDialog: Dialog by lazy {
+        getDialog(context)
+    }
 
     private val sharedPrefs: SharedPreferencesHelper by inject()
 
@@ -187,7 +192,6 @@ class DetailedPokemonFragment : Fragment() {
      * @param state the state of the loader
      */
     private fun handleState(state: PokemonLoader?) {
-        val loadingDialog = LoadingDialog().getDialog(context)
         when (state) {
             is PokemonLoader.Loading -> {
                 if (state.isLoading) {
