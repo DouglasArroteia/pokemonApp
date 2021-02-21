@@ -13,7 +13,7 @@
             android:layout_height="match_parent"
             android:background="@color/background_color"
             android:clipToPadding="false"
-            tools:context=".view.activities.PokemonActivity">
+            tools:context="com.androidapp.douglas.pokemonapp.view.activities.PokemonActivity">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/pokemon_details_card"

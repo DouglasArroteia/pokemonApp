@@ -1,9 +1,9 @@
-package com.example.pokemonapp.view.observables
+package com.androidapp.douglas.pokemonapp.view.observables
 
 import androidx.lifecycle.MutableLiveData
-import com.example.pokemonapp.api.response.models.PokemonDetailsModel
-import com.example.pokemonapp.api.response.models.PokemonListModel
-import com.example.pokemonapp.loader.PokemonLoader
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonDetailsModel
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonListModel
+import com.androidapp.douglas.pokemonapp.loader.PokemonLoader
 
 /**
  * Model used to observe all pokemon features.

@@ -1,8 +1,11 @@
-package com.example.pokemonapp.api
+package com.androidapp.douglas.pokemonapp.api
 
-import com.example.pokemonapp.api.response.models.FavoriteModel
+import com.androidapp.douglas.pokemonapp.api.response.models.FavoriteModel
+import com.androidapp.douglas.pokemonapp.api.Urls
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.POST
+import retrofit2.http.Query
 
 /**
  * Interface that handle POST favorite method.

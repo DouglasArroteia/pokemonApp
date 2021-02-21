@@ -1,4 +1,4 @@
-package com.example.pokemonapp.extensions
+package com.androidapp.douglas.pokemonapp.extensions
 
 import android.content.res.Configuration
 import android.content.res.Resources

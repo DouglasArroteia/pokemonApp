@@ -1,9 +1,9 @@
-package com.example.pokemonapp.view.viewmodel
+package com.androidapp.douglas.pokemonapp.view.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.pokemonapp.api.repositories.PokemonRepositoryMocked
-import com.example.pokemonapp.loader.PokemonLoader
-import com.example.pokemonapp.view.observables.PokemonObservables
+import com.androidapp.douglas.pokemonapp.api.repositories.PokemonRepositoryMocked
+import com.androidapp.douglas.pokemonapp.loader.PokemonLoader
+import com.androidapp.douglas.pokemonapp.view.observables.PokemonObservables
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -18,15 +18,13 @@ class PokemonViewModelTest : AbstractViewModel() {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var pokeViewModel: PokemonViewModel
     private lateinit var pokemonRepo: PokemonRepositoryMocked
-    private lateinit var model: PokemonObservables
+    private lateinit var observables: PokemonObservables
 
     @Before
     fun setUp() {
-        pokeViewModel = PokemonViewModel(PokemonRepositoryMocked())
         pokemonRepo = PokemonRepositoryMocked()
-        model = pokeViewModel.pokeModel
+        observables = PokemonObservables()
     }
 
     /**
@@ -35,18 +33,19 @@ class PokemonViewModelTest : AbstractViewModel() {
     @Test
     fun getPokemonToothless() =
         runBlockingTest {
-            var name = ""
             this.launch {
-                val data = pokemonRepo.getPokemon(28)
-                val dataModel = handleResponse(data, ::handleError)
-                dataModel?.let {
-                    model.pokeDetailsObserver.value = it
-                    model.pokeDetailsObserver.value?.name?.let { pokeName ->
-                        name = pokeName
+                observables.apply {
+                    val data = pokemonRepo.getPokemon(28)
+                    val dataModel = handleResponse(data, observables)
+                    dataModel?.let {
+                        pokeDetailsObserver.value = it
+                    }
+
+                    pokeDetailsObserver.value?.name?.let { pokeName ->
+                        assertThat(pokeName).isEqualTo("Toothless")
                     }
                 }
             }
-            assertThat(name).isEqualTo("Toothless")
         }
 
     /**
@@ -56,18 +55,19 @@ class PokemonViewModelTest : AbstractViewModel() {
     @Test
     fun getPokemonTypeDragon() =
         runBlockingTest {
-            var type = ""
+
             this.launch {
-                val data = pokemonRepo.getPokemon(28)
-                val dataModel = handleResponse(data, ::handleError)
-                dataModel?.let {
-                    model.pokeDetailsObserver.value = it
-                    model.pokeDetailsObserver.value?.types?.let { types ->
-                        type = types[0].type.name
+                observables.apply {
+                    val data = pokemonRepo.getPokemon(28)
+                    val dataModel = handleResponse(data, this)
+                    dataModel?.let {
+                        pokeDetailsObserver.value = it
+                    }
+                    pokeDetailsObserver.value?.types?.let { types ->
+                        assertThat(types[0].type.name).isEqualTo("dragon")
                     }
                 }
             }
-            assertThat(type).isEqualTo("dragon")
         }
 
     /**
@@ -78,18 +78,21 @@ class PokemonViewModelTest : AbstractViewModel() {
         runBlockingTest {
             var correctValue = true
             this.launch {
-                val data = pokemonRepo.getPokemon(28)
-                val dataModel = handleResponse(data, ::handleError)
-                dataModel?.let {
-                    model.pokeDetailsObserver.value = it
-                    model.pokeDetailsObserver.value?.stats?.let { stats ->
-                        stats.forEach { value ->
-                            if (value.baseStat > 255f) correctValue = false
+                observables.apply {
+                    val data = pokemonRepo.getPokemon(28)
+                    val dataModel = handleResponse(data, this)
+                    dataModel?.let {
+                        pokeDetailsObserver.value = it
+                        pokeDetailsObserver.value?.stats?.let { stats ->
+                            stats.forEach { value ->
+                                if (value.baseStat > 255f) correctValue = false
+                            }
                         }
                     }
+
+                    assertThat(correctValue).isTrue()
                 }
             }
-            assertThat(correctValue).isTrue()
         }
 
     /**
@@ -97,22 +100,21 @@ class PokemonViewModelTest : AbstractViewModel() {
      */
     @Test
     fun getPokemonNotNull() = runBlockingTest {
-        val model = pokeViewModel.pokeModel
         this.launch {
-            val data = pokemonRepo.getPokemon(1)
-            val dataModel = handleResponse(data, ::handleError)
-            dataModel?.let {
-                model.pokeDetailsObserver.value = it
+            observables.apply {
+                val data = pokemonRepo.getPokemon(1)
+                val dataModel = handleResponse(data, this)
+                dataModel?.let { details ->
+                    assertThat(details).isNotNull()
+                }
             }
         }
-        val result = model.pokeDetailsObserver.value
-        assertThat(result).isNotNull()
     }
 
 
     private fun handleError(error: Throwable?) {
         error?.message?.let {
-            pokeViewModel.pokeModel.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
+            observables.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
         }
     }
 }

@@ -1,10 +1,10 @@
-package com.example.pokemonapp.api.repositories
+package com.androidapp.douglas.pokemonapp.api.repositories
 
-import com.example.pokemonapp.api.Error
+import com.androidapp.douglas.pokemonapp.api.Error
 import com.example.pokemonapp.api.RetrofitInstance
-import com.example.pokemonapp.api.response.models.PokemonDetailsModel
-import com.example.pokemonapp.api.response.models.PokemonListModel
-import com.example.pokemonapp.api.response.models.FavoriteModel
+import com.androidapp.douglas.pokemonapp.api.response.models.FavoriteModel
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonDetailsModel
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonListModel
 
 /**
  * Contains the implementation of the Retrofit functions.

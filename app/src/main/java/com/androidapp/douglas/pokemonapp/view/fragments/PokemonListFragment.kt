@@ -1,4 +1,4 @@
-package com.example.pokemonapp.view.fragments
+package com.androidapp.douglas.pokemonapp.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokemonapp.R
 import com.example.pokemonapp.databinding.PokemonListFragmentBinding
-import com.example.pokemonapp.extensions.isLandscape
-import com.example.pokemonapp.view.adapter.PokemonListAdapter
-import com.example.pokemonapp.view.observables.PokemonObservables
-import com.example.pokemonapp.view.viewmodel.PokemonListViewModel
+import com.androidapp.douglas.pokemonapp.extensions.isLandscape
+import com.androidapp.douglas.pokemonapp.view.adapter.PokemonListAdapter
+import com.androidapp.douglas.pokemonapp.view.observables.PokemonObservables
+import com.androidapp.douglas.pokemonapp.view.viewmodel.PokemonListViewModel
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -94,8 +94,10 @@ class PokemonListFragment : BasePokemonFragment() {
     }
 
     private fun updateSwipeDirectionIfNeeded() {
-        if (listBinding.swipeRefresh.direction == SwipyRefreshLayoutDirection.TOP)
-            listBinding.swipeRefresh.direction = SwipyRefreshLayoutDirection.BOTTOM
+        listBinding.swipeRefresh.apply {
+            if (direction == SwipyRefreshLayoutDirection.TOP)
+                direction = SwipyRefreshLayoutDirection.BOTTOM
+        }
     }
 
     /**

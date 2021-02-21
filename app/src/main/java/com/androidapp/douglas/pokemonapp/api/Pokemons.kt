@@ -1,7 +1,7 @@
-package com.example.pokemonapp.api
+package com.androidapp.douglas.pokemonapp.api
 
-import com.example.pokemonapp.api.response.models.PokemonDetailsModel
-import com.example.pokemonapp.api.response.models.PokemonListModel
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonDetailsModel
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonListModel
 import retrofit2.Response
 import retrofit2.http.*
 

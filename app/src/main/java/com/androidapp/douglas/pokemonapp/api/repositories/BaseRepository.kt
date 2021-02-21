@@ -1,6 +1,6 @@
-package com.example.pokemonapp.api.repositories
+package com.androidapp.douglas.pokemonapp.api.repositories
 
-import com.example.pokemonapp.api.exception.GenericException
+import com.androidapp.douglas.pokemonapp.api.exception.GenericException
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers

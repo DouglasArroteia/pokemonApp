@@ -1,4 +1,4 @@
-package com.example.pokemonapp.view.utils
+package com.androidapp.douglas.pokemonapp.view.viewutils
 
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
@@ -27,7 +27,6 @@ class ChartModel {
     }
 
     companion object {
-
         private const val WHITE_COLOR = "#FFFFFF"
         private val DATA_LABEL_STYLE_COLOR = AAStyle().color(WHITE_COLOR)
         private val SUBTITLE_STYLE_COLOR = AAStyle().color(WHITE_COLOR).fontSize(30f)

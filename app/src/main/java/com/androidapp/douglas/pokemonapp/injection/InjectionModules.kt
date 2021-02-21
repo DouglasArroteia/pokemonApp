@@ -1,12 +1,12 @@
-package com.example.pokemonapp.injection
+package com.androidapp.douglas.pokemonapp.injection
 
-import com.example.pokemonapp.api.repositories.PokemonRepository
-import com.example.pokemonapp.api.repositories.PokemonRepositoryImpl
-import com.example.pokemonapp.persistence.SharedPreferencesHelper
-import com.example.pokemonapp.view.observables.PokemonObservables
-import com.example.pokemonapp.view.viewmodel.FavoriteViewModel
-import com.example.pokemonapp.view.viewmodel.PokemonListViewModel
-import com.example.pokemonapp.view.viewmodel.PokemonViewModel
+import com.androidapp.douglas.pokemonapp.api.repositories.PokemonRepository
+import com.androidapp.douglas.pokemonapp.api.repositories.PokemonRepositoryImpl
+import com.androidapp.douglas.pokemonapp.persistence.SharedPreferencesHelper
+import com.androidapp.douglas.pokemonapp.view.observables.PokemonObservables
+import com.androidapp.douglas.pokemonapp.view.viewmodel.FavoriteViewModel
+import com.androidapp.douglas.pokemonapp.view.viewmodel.PokemonListViewModel
+import com.androidapp.douglas.pokemonapp.view.viewmodel.PokemonViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

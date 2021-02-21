@@ -1,8 +1,8 @@
-package com.example.pokemonapp.api.repositories
+package com.androidapp.douglas.pokemonapp.api.repositories
 
-import com.example.pokemonapp.api.response.models.FavoriteModel
-import com.example.pokemonapp.api.response.models.PokemonDetailsModel
-import com.example.pokemonapp.api.response.models.PokemonListModel
+import com.androidapp.douglas.pokemonapp.api.response.models.FavoriteModel
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonDetailsModel
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonListModel
 
 /**
  * Pokémon interface repository, contains the GET and POST methods.

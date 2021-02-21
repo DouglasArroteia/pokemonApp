@@ -1,4 +1,4 @@
-package com.example.pokemonapp.persistence
+package com.androidapp.douglas.pokemonapp.persistence
 
 import android.content.Context
 import android.content.SharedPreferences

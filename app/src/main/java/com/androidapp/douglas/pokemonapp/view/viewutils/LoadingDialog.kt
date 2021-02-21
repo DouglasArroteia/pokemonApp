@@ -1,4 +1,4 @@
-package com.example.pokemonapp.view.utils
+package com.androidapp.douglas.pokemonapp.view.viewutils
 
 import android.app.Activity
 import android.app.Dialog

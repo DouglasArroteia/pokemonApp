@@ -1,4 +1,4 @@
-package com.example.pokemonapp.utils
+package com.androidapp.douglas.pokemonapp.utils
 
 import android.content.Context
 import com.example.pokemonapp.R

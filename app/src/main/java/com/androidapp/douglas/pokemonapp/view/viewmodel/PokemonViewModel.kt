@@ -1,9 +1,9 @@
-package com.example.pokemonapp.view.viewmodel
+package com.androidapp.douglas.pokemonapp.view.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.example.pokemonapp.api.repositories.PokemonRepository
-import com.example.pokemonapp.loader.PokemonLoader
-import com.example.pokemonapp.view.observables.PokemonObservables
+import com.androidapp.douglas.pokemonapp.api.repositories.PokemonRepository
+import com.androidapp.douglas.pokemonapp.loader.PokemonLoader
+import com.androidapp.douglas.pokemonapp.view.observables.PokemonObservables
 import kotlinx.coroutines.launch
 
 /**
@@ -20,27 +20,19 @@ class PokemonViewModel(
      * @param id the pokemon id.
      */
     fun getPokemon(id: Int) {
-        pokemonObservables.pokeLoadedObserver.value = false
-        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(true)
-        viewModelScope.launch {
-            val data = repo.getPokemon(id)
-            val dataModel = handleResponse(data, ::handleError)
-            dataModel?.let {
-                pokemonObservables.pokeDetailsObserver.value = it
-                pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
-                pokemonObservables.pokeLoadedObserver.value = true
+        pokemonObservables.apply {
+            pokeLoadedObserver.value = false
+            pokeLoaderObserver.value = PokemonLoader.Loading(true)
+            viewModelScope.launch {
+                val data = repo.getPokemon(id)
+                val dataModel = handleResponse(data, this@apply)
+                dataModel?.let {
+                    pokeDetailsObserver.value = it
+                    pokeLoaderObserver.value = PokemonLoader.Loading(false)
+                    pokeLoadedObserver.value = true
+                }
             }
-        }
-        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
-    }
-
-    /**
-     * Handles any error.
-     */
-    private fun handleError(error: Throwable?) {
-        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
-        error?.message?.let {
-            pokemonObservables.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
+            pokeLoaderObserver.value = PokemonLoader.Loading(false)
         }
     }
 }

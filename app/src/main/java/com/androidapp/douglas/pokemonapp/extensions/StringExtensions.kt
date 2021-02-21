@@ -1,8 +1,8 @@
-package com.example.pokemonapp.extensions
+package com.androidapp.douglas.pokemonapp.extensions
 
 import android.content.Context
+import com.androidapp.douglas.pokemonapp.api.Urls
 import com.example.pokemonapp.R
-import com.example.pokemonapp.api.Urls
 import java.util.*
 
 /**

@@ -1,14 +1,17 @@
-package com.example.pokemonapp.view.adapter
+package com.androidapp.douglas.pokemonapp.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pokemonapp.api.response.models.PokemonListModelItem
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonListModelItem
+import com.androidapp.douglas.pokemonapp.extensions.imageURL
+import com.androidapp.douglas.pokemonapp.extensions.pokemonId
+import com.androidapp.douglas.pokemonapp.extensions.toPokemonNumber
+import com.androidapp.douglas.pokemonapp.persistence.SharedPreferencesHelper
+import com.bumptech.glide.Glide
 import com.example.pokemonapp.databinding.PokemonItemListBinding
-import com.example.pokemonapp.extensions.imageURL
-import com.example.pokemonapp.extensions.pokemonId
-import com.example.pokemonapp.extensions.toPokemonNumber
-import com.example.pokemonapp.persistence.SharedPreferencesHelper
+import com.github.florent37.glidepalette.GlidePalette
 import java.util.*
 
 
@@ -25,7 +28,10 @@ class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
         viewType: Int
     ): PokemonListViewHolder {
         val itemListBinding =
-            PokemonItemListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            PokemonItemListBinding.inflate(
+                LayoutInflater.from(parent.context), parent,
+                false
+            )
 
         return PokemonListViewHolder(itemListBinding)
     }
@@ -40,41 +46,43 @@ class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
     inner class PokemonListViewHolder(private val itemListBinding: PokemonItemListBinding) :
         RecyclerView.ViewHolder(itemListBinding.root) {
         fun bind(item: PokemonListModelItem) {
-            val context = itemListBinding.root.context
-            itemListBinding.pokemonName.text = item.name.capitalize(Locale.getDefault())
-            val pokemonId = item.url.pokemonId()
-            com.bumptech.glide.Glide.with(context)
-                .load(pokemonId.imageURL())
-                .listener(
-                    com.github.florent37.glidepalette.GlidePalette.with(pokemonId.imageURL())
-                        .use(com.github.florent37.glidepalette.BitmapPalette.Profile.MUTED_LIGHT)
-                        .intoCallBack { palette ->
-                            val rgb = palette?.dominantSwatch?.rgb
-                            if (rgb != null) {
-                                itemListBinding.pokemonCard.setCardBackgroundColor(rgb)
-                            }
-                        }.crossfade(true)
-                )
-                .into(itemListBinding.pokemonIcon)
-
-            itemListBinding.pokemonNumber.text = pokemonId.toPokemonNumber(context)
-
-            val sharedPrefs = SharedPreferencesHelper(context)
-            itemListBinding.favoritePokemon.background =
-                if (sharedPrefs.isFavorite(item.name)) {
-                    androidx.core.content.ContextCompat.getDrawable(
-                        context,
-                        com.example.pokemonapp.R.drawable.favorite_selected
+            itemListBinding.apply {
+                val context = root.context
+                pokemonName.text = item.name.capitalize(Locale.getDefault())
+                val pokemonId = item.url.pokemonId()
+                Glide.with(context)
+                    .load(pokemonId.imageURL())
+                    .listener(
+                        GlidePalette.with(pokemonId.imageURL())
+                            .use(com.github.florent37.glidepalette.BitmapPalette.Profile.MUTED_LIGHT)
+                            .intoCallBack { palette ->
+                                val rgb = palette?.dominantSwatch?.rgb
+                                if (rgb != null) {
+                                    pokemonCard.setCardBackgroundColor(rgb)
+                                }
+                            }.crossfade(true)
                     )
-                } else {
-                    androidx.core.content.ContextCompat.getDrawable(
-                        context,
-                        com.example.pokemonapp.R.drawable.favorite_unselected
-                    )
+                    .into(pokemonIcon)
+
+                pokemonNumber.text = pokemonId.toPokemonNumber(context)
+
+                val sharedPrefs = SharedPreferencesHelper(context)
+                favoritePokemon.background =
+                    if (sharedPrefs.isFavorite(item.name)) {
+                        ContextCompat.getDrawable(
+                            context,
+                            com.example.pokemonapp.R.drawable.favorite_selected
+                        )
+                    } else {
+                        ContextCompat.getDrawable(
+                            context,
+                            com.example.pokemonapp.R.drawable.favorite_unselected
+                        )
+                    }
+
+                pokemonCard.setOnClickListener {
+                    navigateToDetailed.invoke(pokemonId.toInt())
                 }
-
-            itemListBinding.pokemonCard.setOnClickListener {
-                navigateToDetailed.invoke(pokemonId.toInt())
             }
         }
     }

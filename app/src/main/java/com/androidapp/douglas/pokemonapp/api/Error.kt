@@ -1,4 +1,4 @@
-package com.example.pokemonapp.api
+package com.androidapp.douglas.pokemonapp.api
 
 import com.google.gson.annotations.SerializedName
 import okhttp3.internal.http2.ErrorCode

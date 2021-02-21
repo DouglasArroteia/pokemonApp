@@ -1,14 +1,14 @@
-package com.example.pokemonapp.view.fragments
+package com.androidapp.douglas.pokemonapp.view.fragments
 
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.androidapp.douglas.pokemonapp.loader.PokemonLoader
 import com.example.pokemonapp.R
-import com.example.pokemonapp.loader.PokemonLoader
-import com.example.pokemonapp.view.utils.getDialog
-import com.example.pokemonapp.view.observables.PokemonObservables
+import com.androidapp.douglas.pokemonapp.view.observables.PokemonObservables
+import com.androidapp.douglas.pokemonapp.view.viewutils.getDialog
 import org.koin.android.ext.android.inject
 
 abstract class BasePokemonFragment : Fragment() {

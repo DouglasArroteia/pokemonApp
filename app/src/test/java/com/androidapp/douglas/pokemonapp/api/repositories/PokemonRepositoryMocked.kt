@@ -1,19 +1,13 @@
-package com.example.pokemonapp.api.repositories
+package com.androidapp.douglas.pokemonapp.api.repositories
 
-import com.example.pokemonapp.api.exception.GenericException
-import com.example.pokemonapp.api.response.models.PokemonDetailsModel
-import com.example.pokemonapp.api.response.models.PokemonListModel
-import com.example.pokemonapp.api.response.models.PokemonListModelItem
-import com.example.pokemonapp.api.response.models.FavoriteModel
-import com.example.pokemonapp.api.response.models.StatsModel
-import com.example.pokemonapp.api.response.models.TypeModel
-import com.example.pokemonapp.api.response.models.TypesModel
+import com.androidapp.douglas.pokemonapp.api.exception.GenericException
+import com.androidapp.douglas.pokemonapp.api.response.models.*
 
 /**
  * Fake repository with pokemon data.
  */
 class PokemonRepositoryMocked : PokemonRepository {
-    override suspend fun getPokemonList(limit: Int): Result<PokemonListModel> {
+    override suspend fun getPokemonList(limit: Int, offset: Int): Result<PokemonListModel> {
         return Result.success(
             PokemonListModel(
                 mutableListOf(

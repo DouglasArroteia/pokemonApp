@@ -1,6 +1,8 @@
 package com.example.pokemonapp.api
 
-import com.example.pokemonapp.api.Urls.Companion.BASE_URL
+import com.androidapp.douglas.pokemonapp.api.Favorites
+import com.androidapp.douglas.pokemonapp.api.Pokemons
+import com.androidapp.douglas.pokemonapp.api.Urls.Companion.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

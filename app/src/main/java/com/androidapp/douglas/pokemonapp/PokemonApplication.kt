@@ -1,10 +1,10 @@
-package com.example.pokemonapp;
+package com.androidapp.douglas.pokemonapp;
 
 import android.app.Application;
-import com.example.pokemonapp.injection.observables
-import com.example.pokemonapp.injection.persistence
-import com.example.pokemonapp.injection.repositories
-import com.example.pokemonapp.injection.viewModels
+import com.androidapp.douglas.pokemonapp.injection.observables
+import com.androidapp.douglas.pokemonapp.injection.persistence
+import com.androidapp.douglas.pokemonapp.injection.repositories
+import com.androidapp.douglas.pokemonapp.injection.viewModels
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

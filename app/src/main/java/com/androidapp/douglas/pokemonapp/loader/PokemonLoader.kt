@@ -1,4 +1,4 @@
-package com.example.pokemonapp.loader
+package com.androidapp.douglas.pokemonapp.loader
 
 /**
  * Handles the loading.

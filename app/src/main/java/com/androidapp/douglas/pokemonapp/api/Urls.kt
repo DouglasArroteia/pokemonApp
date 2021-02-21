@@ -1,4 +1,4 @@
-package com.example.pokemonapp.api
+package com.androidapp.douglas.pokemonapp.api
 
 /**
  * URLS used on this project

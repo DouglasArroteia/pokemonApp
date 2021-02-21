@@ -1,4 +1,4 @@
-package com.example.pokemonapp.api.exception
+package com.androidapp.douglas.pokemonapp.api.exception
 
 /**
  * Generic exception class.

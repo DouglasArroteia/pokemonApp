@@ -1,4 +1,4 @@
-package com.example.pokemonapp.api.response.models
+package com.androidapp.douglas.pokemonapp.api.response.models
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,4 +1,4 @@
-package com.example.pokemonapp.view.fragments
+package com.androidapp.douglas.pokemonapp.view.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -9,15 +9,15 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.example.pokemonapp.R
-import com.example.pokemonapp.api.response.models.PokemonDetailsModel
+import com.androidapp.douglas.pokemonapp.api.response.models.PokemonDetailsModel
+import com.androidapp.douglas.pokemonapp.extensions.*
 import com.example.pokemonapp.databinding.DetailedPokemonFragmentBinding
-import com.example.pokemonapp.extensions.*
-import com.example.pokemonapp.persistence.SharedPreferencesHelper
-import com.example.pokemonapp.utils.ApplicationUtils
-import com.example.pokemonapp.view.utils.ChartModel
-import com.example.pokemonapp.view.observables.PokemonObservables
-import com.example.pokemonapp.view.viewmodel.FavoriteViewModel
-import com.example.pokemonapp.view.viewmodel.PokemonViewModel
+import com.androidapp.douglas.pokemonapp.persistence.SharedPreferencesHelper
+import com.androidapp.douglas.pokemonapp.utils.ApplicationUtils
+import com.androidapp.douglas.pokemonapp.view.viewutils.ChartModel
+import com.androidapp.douglas.pokemonapp.view.observables.PokemonObservables
+import com.androidapp.douglas.pokemonapp.view.viewmodel.FavoriteViewModel
+import com.androidapp.douglas.pokemonapp.view.viewmodel.PokemonViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.florent37.glidepalette.BitmapPalette
@@ -56,12 +56,13 @@ class DetailedPokemonFragment : BasePokemonFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pokemonObservables.pokeLoadedObserver.observe(
-            viewLifecycleOwner,
-            { if (it) initComponents() })
-
-        pokemonObservables.pokeIdObserver.value?.let {
-            pokemonViewModel.getPokemon(it)
+        pokemonObservables.apply {
+            pokeLoadedObserver.observe(
+                viewLifecycleOwner,
+                { if (it) initComponents() })
+            pokeIdObserver.value?.let {
+                pokemonViewModel.getPokemon(it)
+            }
         }
     }
 
@@ -81,32 +82,34 @@ class DetailedPokemonFragment : BasePokemonFragment() {
      * Initialize the details shown in the fragment
      */
     private fun initializeDetails(pokemonDetailsModel: PokemonDetailsModel) {
-        val pokemonUrl = pokemonDetailsModel.id.toString().imageURL()
-        Glide.with(requireContext())
-            .load(pokemonUrl)
-            .listener(
-                GlidePalette.with(pokemonUrl)
-                    .use(BitmapPalette.Profile.MUTED_LIGHT)
-                    .intoCallBack { palette ->
-                        val rgb = palette?.dominantSwatch?.rgb
-                        if (rgb != null) {
-                            detailedPokeBinding.pokemonDetailsCard.setCardBackgroundColor(rgb)
-                        }
-                    }.crossfade(true)
-            )
-            .into(detailedPokeBinding.pokemonBigIcon)
-        detailedPokeBinding.pokemonHeight.text =
-            pokemonDetailsModel.height.toString().toPokemonHeight(requireContext())
-        detailedPokeBinding.pokemonWeight.text =
-            pokemonDetailsModel.weight.toString().toPokemonWeight(requireContext())
-        val types = pokemonDetailsModel.types
-        detailedPokeBinding.pokemonTypes1.text =
-            types[0].type.name.toPokemonType()
-        if (types.size > 1) {
-            detailedPokeBinding.pokemonTypesString.text =
-                context?.getString(R.string.pokemon_types)
-            detailedPokeBinding.pokemonTypes2.visibility = View.VISIBLE
-            detailedPokeBinding.pokemonTypes2.text = types[1].type.name.toPokemonType()
+        detailedPokeBinding.apply {
+            val pokemonUrl = pokemonDetailsModel.id.toString().imageURL()
+            val types = pokemonDetailsModel.types
+            Glide.with(requireContext())
+                .load(pokemonUrl)
+                .listener(
+                    GlidePalette.with(pokemonUrl)
+                        .use(BitmapPalette.Profile.MUTED_LIGHT)
+                        .intoCallBack { palette ->
+                            val rgb = palette?.dominantSwatch?.rgb
+                            if (rgb != null) {
+                                pokemonDetailsCard.setCardBackgroundColor(rgb)
+                            }
+                        }.crossfade(true)
+                )
+                .into(pokemonBigIcon)
+            pokemonHeight.text =
+                pokemonDetailsModel.height.toString().toPokemonHeight(requireContext())
+            pokemonWeight.text =
+                pokemonDetailsModel.weight.toString().toPokemonWeight(requireContext())
+            pokemonTypes1.text =
+                types[0].type.name.toPokemonType()
+            if (types.size > 1) {
+                pokemonTypesString.text =
+                    context?.getString(R.string.pokemon_types)
+                pokemonTypes2.visibility = View.VISIBLE
+                pokemonTypes2.text = types[1].type.name.toPokemonType()
+            }
         }
         loadStatusChart(pokemonDetailsModel)
     }
@@ -150,15 +153,17 @@ class DetailedPokemonFragment : BasePokemonFragment() {
      */
     private fun initializeFavoriteButton(pokemonDetailsModel: PokemonDetailsModel) {
         context?.let { ctx ->
-            val pokeName = pokemonDetailsModel.name
-            detailedPokeBinding.favoritePokemon.background =
-                if (sharedPrefs.isFavorite(pokeName)) {
-                    ContextCompat.getDrawable(ctx, R.drawable.favorite_selected)
-                } else {
-                    ContextCompat.getDrawable(ctx, R.drawable.favorite_unselected)
+            detailedPokeBinding.apply {
+                val pokeName = pokemonDetailsModel.name
+                favoritePokemon.background =
+                    if (sharedPrefs.isFavorite(pokeName)) {
+                        ContextCompat.getDrawable(ctx, R.drawable.favorite_selected)
+                    } else {
+                        ContextCompat.getDrawable(ctx, R.drawable.favorite_unselected)
+                    }
+                favoritePokemon.setOnClickListener {
+                    handleFavoriteButton(ctx, pokeName)
                 }
-            detailedPokeBinding.favoritePokemon.setOnClickListener {
-                handleFavoriteButton(ctx, pokeName)
             }
         }
     }
@@ -167,14 +172,16 @@ class DetailedPokemonFragment : BasePokemonFragment() {
      * Handles the faovite button click
      */
     private fun handleFavoriteButton(ctx: Context, pokeName: String) {
-        detailedPokeBinding.favoritePokemon.background =
-            if (sharedPrefs.isFavorite(pokeName)) {
-                sharedPrefs.unFavorite(pokeName)
-                ContextCompat.getDrawable(ctx, R.drawable.favorite_unselected)
-            } else {
-                sharedPrefs.favorite(pokeName)
-                favoriteViewModel.setFavorite(pokeName)
-                ContextCompat.getDrawable(ctx, R.drawable.favorite_selected)
-            }
+        detailedPokeBinding.favoritePokemon.apply {
+            background =
+                if (sharedPrefs.isFavorite(pokeName)) {
+                    sharedPrefs.unFavorite(pokeName)
+                    ContextCompat.getDrawable(ctx, R.drawable.favorite_unselected)
+                } else {
+                    sharedPrefs.favorite(pokeName)
+                    favoriteViewModel.setFavorite(pokeName)
+                    ContextCompat.getDrawable(ctx, R.drawable.favorite_selected)
+                }
+        }
     }
 }

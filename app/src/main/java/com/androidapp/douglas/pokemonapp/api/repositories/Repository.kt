@@ -1,4 +1,4 @@
-package com.example.pokemonapp.api.repositories
+package com.androidapp.douglas.pokemonapp.api.repositories
 
 /**
  * The repository.
