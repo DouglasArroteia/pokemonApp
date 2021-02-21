@@ -1,8 +1,8 @@
 package com.example.pokemonapp.view.observables
 
 import androidx.lifecycle.MutableLiveData
-import com.example.pokemonapp.api.response.PokemonDetailsResponse
-import com.example.pokemonapp.api.response.PokemonListResponse
+import com.example.pokemonapp.api.response.models.PokemonDetailsModel
+import com.example.pokemonapp.api.response.models.PokemonListModel
 import com.example.pokemonapp.loader.PokemonLoader
 
 /**
@@ -13,12 +13,12 @@ class PokeModel {
     /**
      * Observer for the pokemon list response from api.
      */
-    val pokeListObserver = MutableLiveData<PokemonListResponse>()
+    val pokeListObserver = MutableLiveData<PokemonListModel>()
 
     /**
      * Observer for the pokemon details response from api.
      */
-    val pokeDetailsObserver = MutableLiveData<PokemonDetailsResponse>()
+    val pokeDetailsObserver = MutableLiveData<PokemonDetailsModel>()
 
     /**
      * Observer for the pokemon id response from api.

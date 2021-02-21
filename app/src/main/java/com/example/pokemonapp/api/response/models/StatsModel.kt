@@ -8,5 +8,5 @@ import com.google.gson.annotations.SerializedName
  * @param baseStat the pokemon base stat from a given stats.
  */
 data class StatsModel(
-    @SerializedName("base_stat") val baseStat: Float
+    @SerializedName("base_stat") val baseStat: Int = 0
 )

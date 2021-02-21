@@ -3,7 +3,7 @@ package com.example.pokemonapp.view.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pokemonapp.api.response.PokemonListResponseItem
+import com.example.pokemonapp.api.response.models.PokemonListModelItem
 import com.example.pokemonapp.databinding.PokemonItemListBinding
 import com.example.pokemonapp.extensions.imageURL
 import com.example.pokemonapp.extensions.pokemonId
@@ -18,7 +18,7 @@ import java.util.*
 class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
     RecyclerView.Adapter<PokemonListAdapter.PokemonListViewHolder>() {
 
-    private val items = mutableListOf<PokemonListResponseItem>()
+    private val items = mutableListOf<PokemonListModelItem>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -39,7 +39,7 @@ class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
 
     inner class PokemonListViewHolder(private val itemListBinding: PokemonItemListBinding) :
         RecyclerView.ViewHolder(itemListBinding.root) {
-        fun bind(item: PokemonListResponseItem) {
+        fun bind(item: PokemonListModelItem) {
             val context = itemListBinding.root.context
             itemListBinding.pokemonName.text = item.name.capitalize(Locale.getDefault())
             val pokemonId = item.url.pokemonId()
@@ -82,7 +82,7 @@ class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
     /**
      * Update the adapter
      */
-    fun updateAdapter(newItems: MutableList<PokemonListResponseItem>) {
+    fun updateAdapter(newItems: MutableList<PokemonListModelItem>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()

@@ -1,7 +1,7 @@
 package com.example.pokemonapp.api.repositories
 
-import com.example.pokemonapp.api.response.PokemonDetailsResponse
-import com.example.pokemonapp.api.response.PokemonListResponse
+import com.example.pokemonapp.api.response.models.PokemonDetailsModel
+import com.example.pokemonapp.api.response.models.PokemonListModel
 import com.example.pokemonapp.api.response.models.FavoriteModel
 
 /**
@@ -15,14 +15,14 @@ interface PokemonRepository : Repository {
      */
     suspend fun getPokemonList(
         limit: Int
-    ): Result<PokemonListResponse>
+    ): Result<PokemonListModel>
 
     /**
      * Returns the pokémon with the desired ID.
      */
     suspend fun getPokemon(
         id: Int
-    ): Result<PokemonDetailsResponse>
+    ): Result<PokemonDetailsModel>
 
     /**
      * Sets a pokemons as favorite.

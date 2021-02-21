@@ -8,5 +8,5 @@ import com.google.gson.annotations.SerializedName
  * @param type the pokemon type
  */
 data class TypesModel(
-    @SerializedName("type") val type: TypeModel
+    @SerializedName("type") val type: TypeModel = TypeModel()
 )

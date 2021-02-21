@@ -1,7 +1,7 @@
 package com.example.pokemonapp.api
 
-import com.example.pokemonapp.api.response.PokemonDetailsResponse
-import com.example.pokemonapp.api.response.PokemonListResponse
+import com.example.pokemonapp.api.response.models.PokemonDetailsModel
+import com.example.pokemonapp.api.response.models.PokemonListModel
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -17,7 +17,7 @@ interface Pokemons {
     @GET("pokemon/")
     suspend fun getPokemonList(
         @Query("limit") limit: Int
-    ): Response<PokemonListResponse>
+    ): Response<PokemonListModel>
 
     /**
      * Gets a specific pokémon.
@@ -26,5 +26,5 @@ interface Pokemons {
     @GET("pokemon/{id}")
     suspend fun getPokemon(
         @Path("id") id: Int
-    ): Response<PokemonDetailsResponse>
+    ): Response<PokemonDetailsModel>
 }

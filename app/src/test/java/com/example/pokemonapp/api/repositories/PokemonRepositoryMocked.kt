@@ -1,9 +1,9 @@
 package com.example.pokemonapp.api.repositories
 
 import com.example.pokemonapp.api.exception.GenericException
-import com.example.pokemonapp.api.response.PokemonDetailsResponse
-import com.example.pokemonapp.api.response.PokemonListResponse
-import com.example.pokemonapp.api.response.PokemonListResponseItem
+import com.example.pokemonapp.api.response.models.PokemonDetailsModel
+import com.example.pokemonapp.api.response.models.PokemonListModel
+import com.example.pokemonapp.api.response.models.PokemonListModelItem
 import com.example.pokemonapp.api.response.models.FavoriteModel
 import com.example.pokemonapp.api.response.models.StatsModel
 import com.example.pokemonapp.api.response.models.TypeModel
@@ -13,11 +13,11 @@ import com.example.pokemonapp.api.response.models.TypesModel
  * Fake repository with pokemon data.
  */
 class PokemonRepositoryMocked : PokemonRepository {
-    override suspend fun getPokemonList(limit: Int): Result<PokemonListResponse> {
+    override suspend fun getPokemonList(limit: Int): Result<PokemonListModel> {
         return Result.success(
-            PokemonListResponse(
+            PokemonListModel(
                 mutableListOf(
-                    PokemonListResponseItem(
+                    PokemonListModelItem(
                         name = "list_test",
                         url = "url_test"
                     )
@@ -26,13 +26,13 @@ class PokemonRepositoryMocked : PokemonRepository {
         )
     }
 
-    fun getPokemonListFails(): Result<PokemonListResponse> {
+    fun getPokemonListFails(): Result<PokemonListModel> {
         return Result.failure(GenericException("default error on list"))
     }
 
-    override suspend fun getPokemon(id: Int): Result<PokemonDetailsResponse> {
+    override suspend fun getPokemon(id: Int): Result<PokemonDetailsModel> {
         return Result.success(
-            PokemonDetailsResponse(
+            PokemonDetailsModel(
                 height = 120,
                 id = 28,
                 name = "Toothless",
@@ -41,18 +41,18 @@ class PokemonRepositoryMocked : PokemonRepository {
                 ),
                 weight = 1200,
                 stats = mutableListOf(
-                    StatsModel(baseStat = 200f),
-                    StatsModel(baseStat = 143f),
-                    StatsModel(baseStat = 23f),
-                    StatsModel(baseStat = 65f),
-                    StatsModel(baseStat = 156f),
-                    StatsModel(baseStat = 250f),
+                    StatsModel(baseStat = 200),
+                    StatsModel(baseStat = 143),
+                    StatsModel(baseStat = 23),
+                    StatsModel(baseStat = 65),
+                    StatsModel(baseStat = 156),
+                    StatsModel(baseStat = 250),
                 )
             )
         )
     }
 
-    fun getPokemonFails(): Result<PokemonListResponse> {
+    fun getPokemonFails(): Result<PokemonListModel> {
         return Result.failure(GenericException("default error on retrieving pokemon info"))
     }
 

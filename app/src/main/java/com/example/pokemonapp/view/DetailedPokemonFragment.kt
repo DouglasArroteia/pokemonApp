@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.pokemonapp.R
-import com.example.pokemonapp.api.response.PokemonDetailsResponse
+import com.example.pokemonapp.api.response.models.PokemonDetailsModel
 import com.example.pokemonapp.databinding.DetailedPokemonFragmentBinding
 import com.example.pokemonapp.extensions.*
 import com.example.pokemonapp.loader.PokemonLoader
@@ -88,8 +88,8 @@ class DetailedPokemonFragment : Fragment() {
     /**
      * Initialize the details shown in the fragment
      */
-    private fun initializeDetails(pokemonDetailsResponse: PokemonDetailsResponse) {
-        val pokemonUrl = pokemonDetailsResponse.id.toString().imageURL()
+    private fun initializeDetails(pokemonDetailsModel: PokemonDetailsModel) {
+        val pokemonUrl = pokemonDetailsModel.id.toString().imageURL()
         Glide.with(requireContext())
             .load(pokemonUrl)
             .listener(
@@ -104,10 +104,10 @@ class DetailedPokemonFragment : Fragment() {
             )
             .into(detailedPokeBinding.pokemonBigIcon)
         detailedPokeBinding.pokemonHeight.text =
-            pokemonDetailsResponse.height.toString().toPokemonHeight(requireContext())
+            pokemonDetailsModel.height.toString().toPokemonHeight(requireContext())
         detailedPokeBinding.pokemonWeight.text =
-            pokemonDetailsResponse.weight.toString().toPokemonWeight(requireContext())
-        val types = pokemonDetailsResponse.types
+            pokemonDetailsModel.weight.toString().toPokemonWeight(requireContext())
+        val types = pokemonDetailsModel.types
         detailedPokeBinding.pokemonTypes1.text =
             types[0].type.name.toPokemonType()
         if (types.size > 1) {
@@ -116,13 +116,13 @@ class DetailedPokemonFragment : Fragment() {
             detailedPokeBinding.pokemonTypes2.visibility = View.VISIBLE
             detailedPokeBinding.pokemonTypes2.text = types[1].type.name.toPokemonType()
         }
-        loadStatusChart(pokemonDetailsResponse)
+        loadStatusChart(pokemonDetailsModel)
     }
 
     /**
      * Loads the graph chart to show the pokemon stats
      */
-    private fun loadStatusChart(pokemonDetails: PokemonDetailsResponse) {
+    private fun loadStatusChart(pokemonDetails: PokemonDetailsModel) {
         context?.let {
             val chartModel: AAChartModel = ChartModel().getChartModel()
                 .subtitle(pokemonDetails.name.toPokemonStats(it))
@@ -156,9 +156,9 @@ class DetailedPokemonFragment : Fragment() {
     /**
      * Load the info for the favorite button
      */
-    private fun initializeFavoriteButton(pokemonDetailsResponse: PokemonDetailsResponse) {
+    private fun initializeFavoriteButton(pokemonDetailsModel: PokemonDetailsModel) {
         context?.let { ctx ->
-            val pokeName = pokemonDetailsResponse.name
+            val pokeName = pokemonDetailsModel.name
             detailedPokeBinding.favoritePokemon.background =
                 if (sharedPrefs.isFavorite(pokeName)) {
                     ContextCompat.getDrawable(ctx, R.drawable.favorite_selected)
