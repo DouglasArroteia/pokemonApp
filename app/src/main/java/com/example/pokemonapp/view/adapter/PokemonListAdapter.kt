@@ -83,7 +83,6 @@ class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
      * Update the adapter
      */
     fun updateAdapter(newItems: MutableList<PokemonListModelItem>) {
-        items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
     }

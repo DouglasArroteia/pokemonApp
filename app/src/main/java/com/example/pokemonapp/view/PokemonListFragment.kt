@@ -18,20 +18,20 @@ import com.example.pokemonapp.loader.PokemonLoader
 import com.example.pokemonapp.view.adapter.PokemonListAdapter
 import com.example.pokemonapp.view.viewmodel.PokemonListViewModel
 import com.example.pokemonapp.view.viewmodel.PokemonViewModel
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Fragment that handle the pokemon list
  */
 class PokemonListFragment : Fragment() {
 
-    private val pokemonListViewModel by viewModel<PokemonListViewModel>()
+    private val pokemonListViewModel by sharedViewModel<PokemonListViewModel>()
     private val pokemonViewModel by sharedViewModel<PokemonViewModel>()
 
-    private lateinit var listAdapter: PokemonListAdapter
-
     private lateinit var listBinding: PokemonListFragmentBinding
+
+    private lateinit var listAdapter: PokemonListAdapter
 
     private val loadingDialog: Dialog by lazy {
         getDialog(context)
@@ -54,14 +54,24 @@ class PokemonListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         pokemonListViewModel.pokeModel.pokeLoaderObserver.observe(
-            viewLifecycleOwner, { handleState(it) })
+            viewLifecycleOwner, { handleState() })
         pokemonListViewModel.pokeModel.pokeLoadedObserver.observe(
-            viewLifecycleOwner, { if (it) initComponents() })
+            viewLifecycleOwner, {
+                if (it) {
+                    updatePokemonList()
+                    updateSwipeDirectionIfNeeded()
+                }
+            })
 
-        pokemonListViewModel.getPokemonList(REAL_POKEMONS)
+        initComponents()
+        pokemonListViewModel.getPokemonList()
 
         listBinding.swipeRefresh.setOnRefreshListener {
-            pokemonListViewModel.getPokemonList(REAL_POKEMONS)
+            if (listBinding.swipeRefresh.direction == SwipyRefreshLayoutDirection.TOP) {
+                pokemonListViewModel.getPokemonList()
+            } else {
+                pokemonListViewModel.updatePokemonList()
+            }
             listBinding.swipeRefresh.isRefreshing = false
         }
     }
@@ -70,30 +80,38 @@ class PokemonListFragment : Fragment() {
      * Initialize fragment components
      */
     private fun initComponents() {
-        context?.let {
+        context?.let { ctx ->
             listBinding.recyclerView.layoutManager = GridLayoutManager(
                 requireContext(),
-                if (it.resources.isLandscape()) LANDSCAPE_COLUMN_NUMBER else PORTRAIT_COLUMN_NUMBER,
+                if (ctx.resources.isLandscape()) LANDSCAPE_COLUMN_NUMBER else PORTRAIT_COLUMN_NUMBER,
                 LinearLayoutManager.VERTICAL,
                 false
             )
-
             listBinding.recyclerView.adapter = PokemonListAdapter(::navigateToDetailedFragment)
-            val pokeList = pokemonListViewModel.pokeModel.pokeListObserver.value
             listAdapter = listBinding.recyclerView.adapter as PokemonListAdapter
-            pokeList?.let {
-                listAdapter.updateAdapter(pokeList.pokeList)
-            }
         }
     }
 
     /**
-     * Handles the loading dialog state
-     *
-     * @param state the state of the loader
+     * Updates the adapter with the new pokemons.
      */
-    private fun handleState(state: PokemonLoader?) {
-        when (state) {
+    private fun updatePokemonList() {
+        val pokeList = pokemonListViewModel.pokeModel.pokeListObserver.value
+        pokeList?.let { list ->
+            listAdapter.updateAdapter(list.pokeList)
+        }
+    }
+
+    private fun updateSwipeDirectionIfNeeded() {
+        if (listBinding.swipeRefresh.direction == SwipyRefreshLayoutDirection.TOP)
+            listBinding.swipeRefresh.direction = SwipyRefreshLayoutDirection.BOTTOM
+    }
+
+    /**
+     * Handles the loading dialog state
+     */
+    private fun handleState() {
+        when (val state = pokemonListViewModel.pokeModel.pokeLoaderObserver.value) {
             is PokemonLoader.Loading -> {
                 if (state.isLoading) {
                     loadingDialog.show()
@@ -105,7 +123,7 @@ class PokemonListFragment : Fragment() {
                 Toast.makeText(
                     context,
                     getString(R.string.default_error),
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -122,8 +140,6 @@ class PokemonListFragment : Fragment() {
     }
 
     companion object {
-        private const val REAL_POKEMONS = 251
-
         private const val PORTRAIT_COLUMN_NUMBER = 1
 
         private const val LANDSCAPE_COLUMN_NUMBER = 2

@@ -19,8 +19,4 @@ class PokemonActivity : AppCompatActivity() {
         setContentView(activityBinding.root)
         setSupportActionBar(activityBinding.toolbar)
     }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return findNavController(R.id.navigation_host_fragment).navigateUp()
-    }
 }

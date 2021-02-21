@@ -11,10 +11,11 @@ import com.example.pokemonapp.api.response.models.FavoriteModel
  */
 open class PokemonRepositoryImpl : BaseRepository(), PokemonRepository {
 
-    override suspend fun getPokemonList(limit: Int): Result<PokemonListModel> {
+    override suspend fun getPokemonList(limit: Int, offset: Int): Result<PokemonListModel> {
         return handleResponse(errorBodyType = Error::class.java) {
             RetrofitInstance.POKE_API.getPokemonList(
                 limit = limit,
+                offset = offset
             )
         }
     }

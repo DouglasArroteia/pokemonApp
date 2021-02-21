@@ -63,7 +63,7 @@ class DetailedPokemonFragment : Fragment() {
 
         pokemonViewModel.pokeModel.pokeLoaderObserver.observe(
             viewLifecycleOwner,
-            { handleState(it) })
+            { handleState() })
         pokemonViewModel.pokeModel.pokeLoadedObserver.observe(
             viewLifecycleOwner,
             { if (it) initComponents() })
@@ -188,11 +188,9 @@ class DetailedPokemonFragment : Fragment() {
 
     /**
      * Handles the dialog state.
-     *
-     * @param state the state of the loader
      */
-    private fun handleState(state: PokemonLoader?) {
-        when (state) {
+    private fun handleState() {
+        when (val state = pokemonViewModel.pokeModel.pokeLoaderObserver.value) {
             is PokemonLoader.Loading -> {
                 if (state.isLoading) {
                     loadingDialog.show()
@@ -204,7 +202,7 @@ class DetailedPokemonFragment : Fragment() {
                 Toast.makeText(
                     context,
                     getString(R.string.default_error),
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }

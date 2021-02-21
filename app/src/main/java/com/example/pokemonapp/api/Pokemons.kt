@@ -16,7 +16,8 @@ interface Pokemons {
      */
     @GET("pokemon/")
     suspend fun getPokemonList(
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int = 10,
+        @Query("offset") offset: Int,
     ): Response<PokemonListModel>
 
     /**

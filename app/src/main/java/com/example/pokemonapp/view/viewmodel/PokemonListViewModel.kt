@@ -1,5 +1,6 @@
 package com.example.pokemonapp.view.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonapp.api.repositories.PokemonRepository
 import com.example.pokemonapp.loader.PokemonLoader
@@ -17,21 +18,52 @@ class PokemonListViewModel(
 
     val pokeModel: PokeModel = PokeModel()
 
+    private var offset = 0
+
     /**
      * Gets the list of pokemons.
-     *
-     * @param limit the limit of pokemons returned.
      */
-    fun getPokemonList(limit: Int) {
+    fun getPokemonList() {
         pokeModel.pokeLoadedObserver.value = false
         pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
         viewModelScope.launch {
-            val data = repo.getPokemonList(limit)
+            val data = repo.getPokemonList()
             val dataModel = handleResponse(data, ::handleError)
             dataModel?.let {
                 pokeModel.pokeListObserver.value = it
                 pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
                 pokeModel.pokeLoadedObserver.value = true
+                offset = INITIAL_POKEMON_LOADED
+            }
+        }
+        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+    }
+
+    /**
+     * Updates the list of pokemons.
+     */
+    fun updatePokemonList() {
+        pokeModel.pokeLoadedObserver.value = false
+        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
+        viewModelScope.launch {
+            if (offset + LAST_POKEMONS < MAX_POKEMONS) {
+                val data = repo.getPokemonList(limit = POKEMON_LOADED, offset = offset)
+                offset += POKEMON_LOADED
+                val dataModel = handleResponse(data, ::handleError)
+                dataModel?.let {
+                    pokeModel.pokeListObserver.value = it
+                    pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+                    pokeModel.pokeLoadedObserver.value = true
+                }
+            } else if (offset + LAST_POKEMONS == MAX_POKEMONS) {
+                val data = repo.getPokemonList(limit = LAST_POKEMONS, offset = offset)
+                offset += LAST_POKEMONS
+                val dataModel = handleResponse(data, ::handleError)
+                dataModel?.let {
+                    pokeModel.pokeListObserver.value = it
+                    pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+                    pokeModel.pokeLoadedObserver.value = true
+                }
             }
         }
         pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
@@ -45,5 +77,28 @@ class PokemonListViewModel(
         error?.message?.let {
             pokeModel.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
         }
+    }
+
+    companion object {
+
+        /**
+         * Initial number of pokemon request.
+         */
+        private const val INITIAL_POKEMON_LOADED = 10
+
+        /**
+         * Number of pokémon loaded per page (pull to refresh).
+         */
+        private const val POKEMON_LOADED = 40
+
+        /**
+         * Max number of pokemon found.
+         */
+        private const val MAX_POKEMONS = 898
+
+        /**
+         * The last 8 pokemons.
+         */
+        private const val LAST_POKEMONS = 8
     }
 }
