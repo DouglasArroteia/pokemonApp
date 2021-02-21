@@ -1,4 +1,4 @@
-package com.example.pokemonapp.view
+package com.example.pokemonapp.view.utils
 
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType

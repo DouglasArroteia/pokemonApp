@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokemonapp.api.repositories.PokemonRepository
 import com.example.pokemonapp.api.response.models.FavoriteModel
 import com.example.pokemonapp.loader.PokemonLoader
-import com.example.pokemonapp.view.observables.PokeModel
+import com.example.pokemonapp.view.observables.PokemonObservables
 import kotlinx.coroutines.launch
 
 /**
@@ -13,10 +13,9 @@ import kotlinx.coroutines.launch
  * @param repo the pokemon repository
  */
 class FavoriteViewModel(
-    private val repo: PokemonRepository
+    private val repo: PokemonRepository,
+    private val pokemonObservables: PokemonObservables
 ) : AbstractViewModel() {
-
-    private val pokeModel: PokeModel = PokeModel()
 
     /**
      * Sets the pokemon as favorite.
@@ -24,13 +23,13 @@ class FavoriteViewModel(
      * @param name the pokemon name to be favorited
      */
     fun setFavorite(name: String) {
-        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
+        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(true)
         viewModelScope.launch {
             val model = FavoriteModel(name)
             val response = repo.setFavoritePokemon(name, model)
             handleResponse(response, ::handleError)
         }
-        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
     }
 
     /**
@@ -39,9 +38,9 @@ class FavoriteViewModel(
      * @param error the throwable error.
      */
     private fun handleError(error: Throwable?) {
-        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
         error?.message?.let {
-            pokeModel.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
+            pokemonObservables.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
         }
     }
 }

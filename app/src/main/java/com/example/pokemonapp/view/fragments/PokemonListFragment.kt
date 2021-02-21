@@ -1,41 +1,34 @@
-package com.example.pokemonapp.view
+package com.example.pokemonapp.view.fragments
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokemonapp.R
 import com.example.pokemonapp.databinding.PokemonListFragmentBinding
 import com.example.pokemonapp.extensions.isLandscape
-import com.example.pokemonapp.loader.PokemonLoader
 import com.example.pokemonapp.view.adapter.PokemonListAdapter
+import com.example.pokemonapp.view.observables.PokemonObservables
 import com.example.pokemonapp.view.viewmodel.PokemonListViewModel
-import com.example.pokemonapp.view.viewmodel.PokemonViewModel
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Fragment that handle the pokemon list
  */
-class PokemonListFragment : Fragment() {
+class PokemonListFragment : BasePokemonFragment() {
 
-    private val pokemonListViewModel by sharedViewModel<PokemonListViewModel>()
-    private val pokemonViewModel by sharedViewModel<PokemonViewModel>()
+    private val pokemonListViewModel by viewModel<PokemonListViewModel>()
+    private val pokemonObservables: PokemonObservables by inject()
 
     private lateinit var listBinding: PokemonListFragmentBinding
 
     private lateinit var listAdapter: PokemonListAdapter
-
-    private val loadingDialog: Dialog by lazy {
-        getDialog(context)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,9 +46,7 @@ class PokemonListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pokemonListViewModel.pokeModel.pokeLoaderObserver.observe(
-            viewLifecycleOwner, { handleState() })
-        pokemonListViewModel.pokeModel.pokeLoadedObserver.observe(
+        pokemonObservables.pokeLoadedObserver.observe(
             viewLifecycleOwner, {
                 if (it) {
                     updatePokemonList()
@@ -96,7 +87,7 @@ class PokemonListFragment : Fragment() {
      * Updates the adapter with the new pokemons.
      */
     private fun updatePokemonList() {
-        val pokeList = pokemonListViewModel.pokeModel.pokeListObserver.value
+        val pokeList = pokemonObservables.pokeListObserver.value
         pokeList?.let { list ->
             listAdapter.updateAdapter(list.pokeList)
         }
@@ -108,34 +99,12 @@ class PokemonListFragment : Fragment() {
     }
 
     /**
-     * Handles the loading dialog state
-     */
-    private fun handleState() {
-        when (val state = pokemonListViewModel.pokeModel.pokeLoaderObserver.value) {
-            is PokemonLoader.Loading -> {
-                if (state.isLoading) {
-                    loadingDialog.show()
-                } else {
-                    loadingDialog.dismiss()
-                }
-            }
-            is PokemonLoader.DefaultError -> {
-                Toast.makeText(
-                    context,
-                    getString(R.string.default_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    /**
      * Navigates to the DetailedFragment
      *
      * @param id the pokemon id to be detailed
      */
     private fun navigateToDetailedFragment(id: Int) {
-        pokemonViewModel.pokeModel.pokeIdObserver.value = id
+        pokemonObservables.pokeIdObserver.value = id
         findNavController().navigate(R.id.pokemon_details)
     }
 

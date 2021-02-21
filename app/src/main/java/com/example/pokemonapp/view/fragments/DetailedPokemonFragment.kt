@@ -1,23 +1,21 @@
-package com.example.pokemonapp.view
+package com.example.pokemonapp.view.fragments
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.pokemonapp.R
 import com.example.pokemonapp.api.response.models.PokemonDetailsModel
 import com.example.pokemonapp.databinding.DetailedPokemonFragmentBinding
 import com.example.pokemonapp.extensions.*
-import com.example.pokemonapp.loader.PokemonLoader
 import com.example.pokemonapp.persistence.SharedPreferencesHelper
 import com.example.pokemonapp.utils.ApplicationUtils
+import com.example.pokemonapp.view.utils.ChartModel
+import com.example.pokemonapp.view.observables.PokemonObservables
 import com.example.pokemonapp.view.viewmodel.FavoriteViewModel
 import com.example.pokemonapp.view.viewmodel.PokemonViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
@@ -25,22 +23,19 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Fragment that handle the details of a pokemon.
  */
-class DetailedPokemonFragment : Fragment() {
+class DetailedPokemonFragment : BasePokemonFragment() {
 
-    private val pokemonViewModel by sharedViewModel<PokemonViewModel>()
+    private val pokemonViewModel by viewModel<PokemonViewModel>()
     private val favoriteViewModel by viewModel<FavoriteViewModel>()
 
-    private lateinit var detailedPokeBinding: DetailedPokemonFragmentBinding
+    private val pokemonObservables: PokemonObservables by inject()
 
-    private val loadingDialog: Dialog by lazy {
-        getDialog(context)
-    }
+    private lateinit var detailedPokeBinding: DetailedPokemonFragmentBinding
 
     private val sharedPrefs: SharedPreferencesHelper by inject()
 
@@ -61,14 +56,11 @@ class DetailedPokemonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pokemonViewModel.pokeModel.pokeLoaderObserver.observe(
-            viewLifecycleOwner,
-            { handleState() })
-        pokemonViewModel.pokeModel.pokeLoadedObserver.observe(
+        pokemonObservables.pokeLoadedObserver.observe(
             viewLifecycleOwner,
             { if (it) initComponents() })
 
-        pokemonViewModel.pokeModel.pokeIdObserver.value?.let {
+        pokemonObservables.pokeIdObserver.value?.let {
             pokemonViewModel.getPokemon(it)
         }
     }
@@ -77,7 +69,7 @@ class DetailedPokemonFragment : Fragment() {
      * Initialize the components of the fragment
      */
     private fun initComponents() {
-        val pokemonData = pokemonViewModel.pokeModel.pokeDetailsObserver.value
+        val pokemonData = pokemonObservables.pokeDetailsObserver.value
         pokemonData?.let {
             initializeDetails(it)
 
@@ -184,27 +176,5 @@ class DetailedPokemonFragment : Fragment() {
                 favoriteViewModel.setFavorite(pokeName)
                 ContextCompat.getDrawable(ctx, R.drawable.favorite_selected)
             }
-    }
-
-    /**
-     * Handles the dialog state.
-     */
-    private fun handleState() {
-        when (val state = pokemonViewModel.pokeModel.pokeLoaderObserver.value) {
-            is PokemonLoader.Loading -> {
-                if (state.isLoading) {
-                    loadingDialog.show()
-                } else {
-                    loadingDialog.dismiss()
-                }
-            }
-            is PokemonLoader.DefaultError -> {
-                Toast.makeText(
-                    context,
-                    getString(R.string.default_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
     }
 }

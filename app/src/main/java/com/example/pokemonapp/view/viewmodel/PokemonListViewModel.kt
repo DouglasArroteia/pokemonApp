@@ -1,10 +1,9 @@
 package com.example.pokemonapp.view.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonapp.api.repositories.PokemonRepository
 import com.example.pokemonapp.loader.PokemonLoader
-import com.example.pokemonapp.view.observables.PokeModel
+import com.example.pokemonapp.view.observables.PokemonObservables
 import kotlinx.coroutines.launch
 
 /**
@@ -13,10 +12,9 @@ import kotlinx.coroutines.launch
  * @param repo the pokemon repository
  */
 class PokemonListViewModel(
-    private val repo: PokemonRepository
+    private val repo: PokemonRepository,
+    private val pokemonObservables: PokemonObservables
 ) : AbstractViewModel() {
-
-    val pokeModel: PokeModel = PokeModel()
 
     private var offset = 0
 
@@ -24,58 +22,58 @@ class PokemonListViewModel(
      * Gets the list of pokemons.
      */
     fun getPokemonList() {
-        pokeModel.pokeLoadedObserver.value = false
-        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
+        pokemonObservables.pokeLoadedObserver.value = false
+        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(true)
         viewModelScope.launch {
             val data = repo.getPokemonList()
             val dataModel = handleResponse(data, ::handleError)
             dataModel?.let {
-                pokeModel.pokeListObserver.value = it
-                pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
-                pokeModel.pokeLoadedObserver.value = true
+                pokemonObservables.pokeListObserver.value = it
+                pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+                pokemonObservables.pokeLoadedObserver.value = true
                 offset = INITIAL_POKEMON_LOADED
             }
         }
-        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
     }
 
     /**
      * Updates the list of pokemons.
      */
     fun updatePokemonList() {
-        pokeModel.pokeLoadedObserver.value = false
-        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(true)
+        pokemonObservables.pokeLoadedObserver.value = false
+        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(true)
         viewModelScope.launch {
             if (offset + LAST_POKEMONS < MAX_POKEMONS) {
                 val data = repo.getPokemonList(limit = POKEMON_LOADED, offset = offset)
                 offset += POKEMON_LOADED
                 val dataModel = handleResponse(data, ::handleError)
                 dataModel?.let {
-                    pokeModel.pokeListObserver.value = it
-                    pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
-                    pokeModel.pokeLoadedObserver.value = true
+                    pokemonObservables.pokeListObserver.value = it
+                    pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+                    pokemonObservables.pokeLoadedObserver.value = true
                 }
             } else if (offset + LAST_POKEMONS == MAX_POKEMONS) {
                 val data = repo.getPokemonList(limit = LAST_POKEMONS, offset = offset)
                 offset += LAST_POKEMONS
                 val dataModel = handleResponse(data, ::handleError)
                 dataModel?.let {
-                    pokeModel.pokeListObserver.value = it
-                    pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
-                    pokeModel.pokeLoadedObserver.value = true
+                    pokemonObservables.pokeListObserver.value = it
+                    pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+                    pokemonObservables.pokeLoadedObserver.value = true
                 }
             }
         }
-        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
     }
 
     /**
      * Handles any error.
      */
     private fun handleError(error: Throwable?) {
-        pokeModel.pokeLoaderObserver.value = PokemonLoader.Loading(false)
+        pokemonObservables.pokeLoaderObserver.value = PokemonLoader.Loading(false)
         error?.message?.let {
-            pokeModel.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
+            pokemonObservables.pokeLoaderObserver.value = PokemonLoader.DefaultError(it)
         }
     }
 

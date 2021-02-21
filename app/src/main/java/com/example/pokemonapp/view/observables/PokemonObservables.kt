@@ -8,7 +8,7 @@ import com.example.pokemonapp.loader.PokemonLoader
 /**
  * Model used to observe all pokemon features.
  */
-class PokeModel {
+class PokemonObservables {
 
     /**
      * Observer for the pokemon list response from api.

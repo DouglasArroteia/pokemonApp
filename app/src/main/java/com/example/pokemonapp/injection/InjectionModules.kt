@@ -3,6 +3,7 @@ package com.example.pokemonapp.injection
 import com.example.pokemonapp.api.repositories.PokemonRepository
 import com.example.pokemonapp.api.repositories.PokemonRepositoryImpl
 import com.example.pokemonapp.persistence.SharedPreferencesHelper
+import com.example.pokemonapp.view.observables.PokemonObservables
 import com.example.pokemonapp.view.viewmodel.FavoriteViewModel
 import com.example.pokemonapp.view.viewmodel.PokemonListViewModel
 import com.example.pokemonapp.view.viewmodel.PokemonViewModel
@@ -14,9 +15,9 @@ import org.koin.dsl.module
  * Module related to Dependency Injection for the view models.
  */
 val viewModels = module {
-    viewModel { PokemonListViewModel(get()) }
-    viewModel { PokemonViewModel(get()) }
-    viewModel { FavoriteViewModel(get()) }
+    viewModel { PokemonListViewModel(get(), get()) }
+    viewModel { PokemonViewModel(get(), get()) }
+    viewModel { FavoriteViewModel(get(), get()) }
 }
 
 /**
@@ -31,4 +32,11 @@ val repositories = module {
  */
 val persistence = module {
     single { SharedPreferencesHelper(androidContext()) }
+}
+
+/**
+ * Module related to Dependency Injection for the observables.
+ */
+val observables = module {
+    single { PokemonObservables() }
 }

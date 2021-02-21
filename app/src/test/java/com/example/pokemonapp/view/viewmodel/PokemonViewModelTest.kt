@@ -3,7 +3,7 @@ package com.example.pokemonapp.view.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.pokemonapp.api.repositories.PokemonRepositoryMocked
 import com.example.pokemonapp.loader.PokemonLoader
-import com.example.pokemonapp.view.observables.PokeModel
+import com.example.pokemonapp.view.observables.PokemonObservables
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ class PokemonViewModelTest : AbstractViewModel() {
 
     private lateinit var pokeViewModel: PokemonViewModel
     private lateinit var pokemonRepo: PokemonRepositoryMocked
-    private lateinit var model: PokeModel
+    private lateinit var model: PokemonObservables
 
     @Before
     fun setUp() {
