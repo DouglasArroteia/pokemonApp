@@ -6,18 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
-import com.bumptech.glide.Glide
-import com.example.pokemonapp.R
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
+import com.androidapp.douglas.pokemonapp.R
 import com.androidapp.douglas.pokemonapp.api.response.models.PokemonDetailsModel
+import com.androidapp.douglas.pokemonapp.databinding.DetailedPokemonFragmentBinding
 import com.androidapp.douglas.pokemonapp.extensions.*
-import com.example.pokemonapp.databinding.DetailedPokemonFragmentBinding
 import com.androidapp.douglas.pokemonapp.persistence.SharedPreferencesHelper
 import com.androidapp.douglas.pokemonapp.utils.ApplicationUtils
-import com.androidapp.douglas.pokemonapp.view.viewutils.ChartModel
+import com.androidapp.douglas.pokemonapp.view.activities.PokemonActivity
 import com.androidapp.douglas.pokemonapp.view.observables.PokemonObservables
 import com.androidapp.douglas.pokemonapp.view.viewmodel.FavoriteViewModel
 import com.androidapp.douglas.pokemonapp.view.viewmodel.PokemonViewModel
+import com.androidapp.douglas.pokemonapp.view.viewutils.ChartModel
+import com.bumptech.glide.Glide
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.florent37.glidepalette.BitmapPalette
@@ -45,10 +47,15 @@ class DetailedPokemonFragment : BasePokemonFragment() {
         savedInstanceState: Bundle?
     ): View {
         detailedPokeBinding =
-            DataBindingUtil.inflate(
-                inflater, R.layout.detailed_pokemon_fragment, container,
-                false
+            DetailedPokemonFragmentBinding.inflate(
+                layoutInflater
             )
+
+        NavigationUI.setupActionBarWithNavController(
+            (activity as PokemonActivity),
+            findNavController()
+        )
+
 
         return detailedPokeBinding.root
     }

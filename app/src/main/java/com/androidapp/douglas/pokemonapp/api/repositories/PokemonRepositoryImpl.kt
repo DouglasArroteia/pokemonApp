@@ -1,7 +1,7 @@
 package com.androidapp.douglas.pokemonapp.api.repositories
 
 import com.androidapp.douglas.pokemonapp.api.Error
-import com.example.pokemonapp.api.RetrofitInstance
+import com.androidapp.douglas.pokemonapp.api.RetrofitInstance
 import com.androidapp.douglas.pokemonapp.api.response.models.FavoriteModel
 import com.androidapp.douglas.pokemonapp.api.response.models.PokemonDetailsModel
 import com.androidapp.douglas.pokemonapp.api.response.models.PokemonListModel

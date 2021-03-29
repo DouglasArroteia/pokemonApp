@@ -10,6 +10,7 @@
         <item name="android:textColorPrimary">@color/toolbar_text_color</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:background">@color/toolbar_background_color</item>
+        <item name="colorControlNormal">@android:color/white</item>
     </style>
 
     <style name="ToolbarTextAppearance" parent="TextAppearance.AppCompat.Title">

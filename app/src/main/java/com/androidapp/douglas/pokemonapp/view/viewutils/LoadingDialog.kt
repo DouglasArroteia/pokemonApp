@@ -4,8 +4,8 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
-import com.example.pokemonapp.R
-import com.example.pokemonapp.databinding.LoadingLayoutBinding
+import com.androidapp.douglas.pokemonapp.R
+import com.androidapp.douglas.pokemonapp.databinding.LoadingLayoutBinding
 
 
 /**

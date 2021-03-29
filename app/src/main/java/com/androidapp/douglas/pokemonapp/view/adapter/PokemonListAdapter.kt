@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.androidapp.douglas.pokemonapp.R
 import com.androidapp.douglas.pokemonapp.api.response.models.PokemonListModelItem
 import com.androidapp.douglas.pokemonapp.extensions.imageURL
 import com.androidapp.douglas.pokemonapp.extensions.pokemonId
 import com.androidapp.douglas.pokemonapp.extensions.toPokemonNumber
 import com.androidapp.douglas.pokemonapp.persistence.SharedPreferencesHelper
 import com.bumptech.glide.Glide
-import com.example.pokemonapp.databinding.PokemonItemListBinding
+import com.androidapp.douglas.pokemonapp.databinding.PokemonItemListBinding
 import com.github.florent37.glidepalette.GlidePalette
 import java.util.*
 
@@ -71,12 +72,12 @@ class PokemonListAdapter(private val navigateToDetailed: (id: Int) -> Unit) :
                     if (sharedPrefs.isFavorite(item.name)) {
                         ContextCompat.getDrawable(
                             context,
-                            com.example.pokemonapp.R.drawable.favorite_selected
+                            R.drawable.favorite_selected
                         )
                     } else {
                         ContextCompat.getDrawable(
                             context,
-                            com.example.pokemonapp.R.drawable.favorite_unselected
+                            R.drawable.favorite_unselected
                         )
                     }
 

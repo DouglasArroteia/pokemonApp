@@ -1,8 +1,8 @@
 package com.androidapp.douglas.pokemonapp.extensions
 
 import android.content.Context
+import com.androidapp.douglas.pokemonapp.R
 import com.androidapp.douglas.pokemonapp.api.Urls
-import com.example.pokemonapp.R
 import java.util.*
 
 /**
@@ -61,4 +61,9 @@ fun String.pokemonId(): String = substringAfter("pokemon/").replace("/", "")
  * Example: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png"
  */
 fun String.imageURL(): String = Urls.ICON_BASE_URL.plus(this.plus(".png"))
+
+/**
+ * Converts the color get from getString(R.color.id) removing the alpha.
+ */
+fun String.noAlphaColor(): String = this.replace("#ff", "#")
 
