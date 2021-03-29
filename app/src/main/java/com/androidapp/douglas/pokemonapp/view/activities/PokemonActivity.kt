@@ -2,7 +2,8 @@ package com.androidapp.douglas.pokemonapp.view.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.pokemonapp.databinding.MainActivityBinding
+import androidx.navigation.Navigation.findNavController
+import com.androidapp.douglas.pokemonapp.databinding.MainActivityBinding
 
 /**
  * Pokemon app activity.
@@ -18,5 +19,9 @@ class PokemonActivity : AppCompatActivity() {
             setContentView(root)
             setSupportActionBar(toolbar)
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(activityBinding.navigationHostFragment).navigateUp()
     }
 }

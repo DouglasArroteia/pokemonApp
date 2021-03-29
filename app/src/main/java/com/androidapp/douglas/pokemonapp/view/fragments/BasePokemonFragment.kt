@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.androidapp.douglas.pokemonapp.loader.PokemonLoader
-import com.example.pokemonapp.R
+import com.androidapp.douglas.pokemonapp.R
 import com.androidapp.douglas.pokemonapp.view.observables.PokemonObservables
 import com.androidapp.douglas.pokemonapp.view.viewutils.getDialog
 import org.koin.android.ext.android.inject

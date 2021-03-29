@@ -15,10 +15,4 @@
     <string name="pokemon_details_def">Defense</string>
     <string name="pokemon_details_s_def">Spe Defense</string>
     <string name="pokemon_details_speed">Speed</string>
-    <string name="status_attack">#f44336</string>
-    <string name="status_s_attack">#4caf50</string>
-    <string name="status_hp">#2196f3</string>
-    <string name="status_def">#ffc107</string>
-    <string name="status_s_def">#e91e63</string>
-    <string name="status_speed">#673ab7</string>
 </resources>

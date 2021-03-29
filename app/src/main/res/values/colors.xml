@@ -9,4 +9,11 @@
     <color name="favorites_color">#FF0000</color>
     <color name="info_description_text_color">#9FFFFFFF</color>
     <color name="pokemon_list_text_color">#FFFFFF</color>
+
+    <color name="status_attack">#f44336</color>
+    <color name="status_s_attack">#4caf50</color>
+    <color name="status_hp">#2196f3</color>
+    <color name="status_def">#ffc107</color>
+    <color name="status_s_def">#e91e63</color>
+    <color name="status_speed">#673ab7</color>
 </resources>

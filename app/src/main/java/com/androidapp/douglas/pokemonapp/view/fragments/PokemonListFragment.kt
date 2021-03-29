@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pokemonapp.R
-import com.example.pokemonapp.databinding.PokemonListFragmentBinding
+import androidx.recyclerview.widget.RecyclerView
+import com.androidapp.douglas.pokemonapp.R
+import com.androidapp.douglas.pokemonapp.databinding.PokemonListFragmentBinding
 import com.androidapp.douglas.pokemonapp.extensions.isLandscape
 import com.androidapp.douglas.pokemonapp.view.adapter.PokemonListAdapter
 import com.androidapp.douglas.pokemonapp.view.observables.PokemonObservables
 import com.androidapp.douglas.pokemonapp.view.viewmodel.PokemonListViewModel
-import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,9 +35,8 @@ class PokemonListFragment : BasePokemonFragment() {
         savedInstanceState: Bundle?
     ): View {
         listBinding =
-            DataBindingUtil.inflate(
-                inflater, R.layout.pokemon_list_fragment, container,
-                false
+            PokemonListFragmentBinding.inflate(
+                layoutInflater
             )
         return listBinding.root
     }
@@ -50,21 +48,11 @@ class PokemonListFragment : BasePokemonFragment() {
             viewLifecycleOwner, {
                 if (it) {
                     updatePokemonList()
-                    updateSwipeDirectionIfNeeded()
                 }
             })
 
         initComponents()
         pokemonListViewModel.getPokemonList()
-
-        listBinding.swipeRefresh.setOnRefreshListener {
-            if (listBinding.swipeRefresh.direction == SwipyRefreshLayoutDirection.TOP) {
-                pokemonListViewModel.getPokemonList()
-            } else {
-                pokemonListViewModel.updatePokemonList()
-            }
-            listBinding.swipeRefresh.isRefreshing = false
-        }
     }
 
     /**
@@ -79,6 +67,14 @@ class PokemonListFragment : BasePokemonFragment() {
                 false
             )
             listBinding.recyclerView.adapter = PokemonListAdapter(::navigateToDetailedFragment)
+            listBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (!recyclerView.canScrollVertically(1)) {
+                        pokemonListViewModel.updatePokemonList()
+                    }
+                }
+            })
             listAdapter = listBinding.recyclerView.adapter as PokemonListAdapter
         }
     }
@@ -90,13 +86,6 @@ class PokemonListFragment : BasePokemonFragment() {
         val pokeList = pokemonObservables.pokeListObserver.value
         pokeList?.let { list ->
             listAdapter.updateAdapter(list.pokeList)
-        }
-    }
-
-    private fun updateSwipeDirectionIfNeeded() {
-        listBinding.swipeRefresh.apply {
-            if (direction == SwipyRefreshLayoutDirection.TOP)
-                direction = SwipyRefreshLayoutDirection.BOTTOM
         }
     }
 

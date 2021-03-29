@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.pokemonapp"
+        applicationId "com.androidapp.douglas.pokemonapp"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
@@ -26,7 +26,6 @@ android {
     }
 
     buildFeatures {
-        dataBinding true
         viewBinding true
     }
 
@@ -90,23 +89,19 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.1.1"
 
     // navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"
-    implementation "androidx.navigation:navigation-ui-ktx:2.3.3"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.4"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.4"
 
     // Feature module Support
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.3"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.4"
 
     // Testing Navigation
-    androidTestImplementation "androidx.navigation:navigation-testing:2.3.3"
+    androidTestImplementation "androidx.navigation:navigation-testing:2.3.4"
 
     // Jetpack Compose Integration
-    implementation "androidx.navigation:navigation-compose:1.0.0-alpha07"
+    implementation "androidx.navigation:navigation-compose:1.0.0-alpha09"
 
     // coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
-
-    // swipe to refresh
-    implementation 'com.github.omadahealth:swipy:1.2.3@aar'
-
 }
